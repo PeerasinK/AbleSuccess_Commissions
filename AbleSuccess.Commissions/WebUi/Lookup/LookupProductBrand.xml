@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- main node for configuration -->
+<Lookups>
+  <ProductBrand>
+    <Config>
+      <key>1</key>
+      <value>Autodesk PSEB</value>
+    </Config>
+    <Config>
+      <key>2</key>
+      <value>Autodesk MFG</value>
+    </Config>
+    <Config>
+      <key>3</key>
+      <value>Adobe</value>
+    </Config>
+    <Config>
+      <key>4</key>
+      <value>Microsoft</value>
+    </Config>
+    <Config>
+      <key>5</key>
+      <value>Dell</value>
+    </Config>
+    <Config>
+      <key>6</key>
+      <value>HP</value>
+    </Config>
+    <Config>
+      <key>7</key>
+      <value>SketchUp</value>
+    </Config>
+	<Config>
+      <key>8</key>
+      <value>Autodesk AEC</value>
+    </Config>
+    <Config>
+      <key>9</key>
+      <value>Other</value>
+    </Config>
+  <Config>
+      <key>10</key>
+      <value>Autodesk M&amp;E</value>
+    </Config>
+  </ProductBrand>
+</Lookups>

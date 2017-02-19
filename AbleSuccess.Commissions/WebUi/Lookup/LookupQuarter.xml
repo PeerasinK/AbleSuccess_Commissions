@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- main node for configuration -->
+<Lookups>
+  <Quarter>
+    <Config>
+      <key>1</key>
+      <value>Q1</value>
+    </Config>
+    <Config>
+      <key>2</key>
+      <value>Q2</value>
+    </Config>
+    <Config>
+      <key>3</key>
+      <value>Q3</value>
+    </Config>
+    <Config>
+      <key>4</key>
+      <value>Q4</value>
+    </Config>
+  </Quarter>
+</Lookups>

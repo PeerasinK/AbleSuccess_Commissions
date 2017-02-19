@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- main node for configuration -->
+<Lookups>
+  <Role>
+    <Config>
+      <key>0</key>
+      <value>System Admin</value>
+    </Config>
+    <Config>
+      <key>1</key>
+      <value>Able Success</value>
+    </Config>
+    <Config>
+      <key>2</key>
+      <value>User</value>
+    </Config>
+  </Role>
+</Lookups>

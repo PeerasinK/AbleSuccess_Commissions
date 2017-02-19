@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- main node for configuration -->
+<Lookups>
+  <ReportType>
+    <Config>
+      <key>0</key>
+      <value>Revenue</value>
+    </Config>
+    <Config>
+      <key>1</key>
+      <value>Profit</value>
+    </Config>
+  </ReportType>
+</Lookups>

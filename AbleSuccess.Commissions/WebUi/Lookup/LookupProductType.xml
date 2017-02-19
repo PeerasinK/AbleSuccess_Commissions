@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- main node for configuration -->
+<Lookups>
+  <ProductType>
+    <Config>
+      <key>1</key>
+      <value>Software__3%</value>
+    </Config>
+    <Config>
+      <key>2</key>
+      <value>Hardware__0%</value>
+    </Config>
+    <Config>
+      <key>3</key>
+      <value>Machine__0%</value>
+    </Config>
+    <Config>
+      <key>4</key>
+      <value>Training__3%</value>
+    </Config>
+    <Config>
+      <key>5</key>
+      <value>Support &amp; Service__3%</value>
+    </Config>
+  </ProductType>
+</Lookups>

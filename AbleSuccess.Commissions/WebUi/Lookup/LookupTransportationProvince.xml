@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- main node for configuration -->
+<Lookups>
+  <TransportationProvince>
+    <Config>
+      <key>BKK</key>
+      <value>กรุงเทพ__(ขั้นต่ำ 500)</value>
+    </Config>
+    <Config>
+      <key>SPK</key>
+      <value>สมุทรปราการ__(ขั้นต่ำ 500)</value>
+    </Config>
+    <Config>
+      <key>CCO</key>
+      <value>ฉะเชิงเทรา__(ขั้นต่ำ 1000)</value>
+    </Config>
+    <Config>
+      <key>AYA</key>
+      <value>อยุธยา__(ขั้นต่ำ 1500)</value>
+    </Config>
+    <Config>
+      <key>CBI</key>
+      <value>ชลบุรี__(ขั้นต่ำ 1500)</value>
+    </Config>
+    <Config>
+      <key>PTE</key>
+      <value>ปทุมธานี__(ขั้นต่ำ 1500)</value>
+    </Config>
+    <Config>
+      <key>SKN</key>
+      <value>สมุทรสาคร__(ขั้นต่ำ 1500)</value>
+    </Config>
+    <Config>
+      <key>RYG</key>
+      <value>ระยอง__(ขั้นต่ำ 2000)</value>
+    </Config>
+    <Config>
+      <key>PRI</key>
+      <value>ปราจีนบุรี__(ขั้นต่ำ 2000)</value>
+    </Config>
+    <Config>
+      <key>NPT</key>
+      <value>นครปฐม__(ขั้นต่ำ 2000)</value>
+    </Config>
+  </TransportationProvince>
+</Lookups>

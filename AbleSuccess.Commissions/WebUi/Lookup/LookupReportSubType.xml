@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- main node for configuration -->
+<Lookups>
+  <ReportSubType>
+    <Config>
+      <key>0</key>
+      <value>Yearly</value>
+    </Config>
+    <Config>
+      <key>1</key>
+      <value>Quarter</value>
+    </Config>
+  </ReportSubType>
+</Lookups>
