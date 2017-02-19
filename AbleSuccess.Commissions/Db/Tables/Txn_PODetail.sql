@@ -1,0 +1,20 @@
+﻿CREATE TABLE [dbo].[Txn_PODetail](
+	[PoDetailId] [int] IDENTITY(1,1) NOT NULL,
+	[PoId] [int] NOT NULL,
+	[ProductName] [varchar](255) NOT NULL,
+	[ProductBrand] [varchar](255) NULL,
+	[ProductType] [int] NULL,
+	[PricePerUnit] [decimal](18, 2) NOT NULL,
+	[ActualPricePerUnit] [decimal](18, 2) NOT NULL,
+	[Amount] [int] NOT NULL,
+	[TotalPrice] [decimal](18, 2) NOT NULL,
+	[ActualTotalPrice] [decimal](18, 2) NOT NULL,
+	[Tax] [decimal](18, 2) NOT NULL,
+	[TransportFee] [decimal](18, 2) NOT NULL,
+	[ParcelFee] [decimal](18, 2) NOT NULL,
+	[ServiceFee] [decimal](18, 2) NOT NULL,
+	[TotalCost] [decimal](18, 2) NOT NULL,
+	[Profit] [decimal](18, 2) NOT NULL,
+	[ProfitPercentage] [decimal](5, 2) NOT NULL,
+	[Remark] [varchar](max) NULL
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
