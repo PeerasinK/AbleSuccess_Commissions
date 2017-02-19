@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Header = "Report";
+}
+
+<!-- Styles -->
+@Styles.Render("~/Content/css")
+
+<div class="col-md-12 menu-header">
+    @ViewBag.Header
+</div>
+<div class="container">
+    <div class="col-md-offset-2 col-md-8 well">
+        <div class="col-xs-8">
+            <select class="form-control">
+                <option value="-1">Please choose ...</option>
+            </select>
+        </div>
+        <div class="col-xs-4 text-center">
+            <button class="btn btn-primary btn-block"> View </button>
+        </div>
+    </div>
+</div>

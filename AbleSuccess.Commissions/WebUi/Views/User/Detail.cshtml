@@ -1,0 +1,183 @@
+﻿@model AbleSuccess.Commissions.WebUi.Models.UserDetailViewModel
+
+@{
+    if (ViewBag.Action == "Edit")
+    {
+        ViewBag.Header = "User Detail";
+    }
+    else
+    {
+        ViewBag.Header = "Create New User";
+    }
+}
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+@Styles.Render("~/Content/css")
+
+<div class="col-xs-12 menu-header">
+    @ViewBag.Header
+</div>
+<div class="container">
+    <div class="col-md-offset-1 col-md-10 well">
+        <div class="col-md-12">
+            @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "DetailForm" }))
+            {
+                <table class="col-md-12">
+                    @*DETAIL*@
+
+                    <tr>
+                        <td class="col-sm-6">
+                            <table>
+                                @if (ViewBag.Action == "Edit")
+                                {
+                                    <tr>
+                                        <td class="col-md-5"><strong>User Id: </strong></td>
+                                        <td>@Model.UserId @Html.Hidden("UserId", @Model.UserId)</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="2">&nbsp;</td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td class="col-md-5"><strong>User Code: </strong></td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.UserCode, new { @class = "form-control", @placeholder = "User Code" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-5"><strong>Username: </strong></td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.Username, new { @class = "form-control", @placeholder = "Username" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-5"><strong>Role: </strong></td>
+                                    <td>
+                                        @Html.DropDownList("Role", new SelectList(@Model.LookupRole, "Key", "Value"), new { @class = "form-control" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-5"><strong>Status: </strong></td>
+                                    <td>
+                                        @Html.DropDownList("Status", new SelectList(@Model.LookupUserStatus, "Key", "Value"), new { @class = "form-control" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="col-sm-6">
+                            <table>
+                                <tr>
+                                    <td colspan="2">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-5"><strong>First Name: </strong></td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @placeholder = "First Name" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-5"><strong>Last Name: </strong></td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @placeholder = "Last Name" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-5"><strong>Devision: </strong></td>
+                                    <td>
+                                        @Html.DropDownList("Devision", new SelectList(@Model.LookupDevision, "Key", "Value"), new { @class = "form-control" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-5"><strong>Position: </strong></td>
+                                    <td>
+                                        @Html.DropDownList("Position", new SelectList(@Model.LookupPosition, "Key", "Value"), new { @class = "form-control" })
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                @*BUTTON*@
+                <div class="col-sm-12" style="margin-top:25px">
+                    <div class="col-sm-offset-1 col-sm-10">
+                        <div class="col-xs-12 col-sm-6">
+                            <input type="button" value="Save" class="btn btn-primary btn-block" style="width:90%" onclick="SaveUser()" />
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <input type="button" value="Back" class="btn btn-warning btn-block" style="width:90%" onclick="Back()" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function isEmpty(str) {
+        return (!str || 0 === str.length);
+    }
+
+    function isNotSelected(value) {
+        return value == -1;
+    }
+
+    function isValidForm() {
+        var validate = '';
+
+        if (isEmpty($('#Username').val())) validate += "- Username<br>";
+        if (isNotSelected($('#Role').val())) validate += "- Role<br>";
+        if (isNotSelected($('#Status').val())) validate += "- Status<br>";
+        if (isEmpty($('#FirstName').val())) validate += "- First Name<br>";
+        if (isEmpty($('#LastName').val())) validate += "- Last Name<br>";
+        if (isNotSelected($('#Devision').val())) validate += "- Devision<br>";
+        if (isNotSelected($('#Position').val())) validate += "- Position<br>";
+
+        if (validate != '') {
+            bootbox.alert('<h4>Please input all these data:</h4>' + validate);
+            return false;
+        } else return true;
+    }
+
+    function SaveUser() {
+        if (isValidForm()) {
+            bootbox.confirm("Do you want to confirm ?", function (result) {
+                if (result == true) {
+
+                    var actionUrl;
+                    if ('@ViewBag.Action' == "Edit") actionUrl = '@Url.Action("Edit", "User")';
+                    else actionUrl = '@Url.Action("New", "User")';
+
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        async: true,
+                        cache: false,
+                        url: actionUrl,
+                        data: $('#DetailForm').serialize(),
+                        success: function (response) {
+                            if (response.Result) {
+                                bootbox.alert("Save successful");
+                                if ('@ViewBag.Action' == "New") window.location = response.Url
+                            }
+                            else {
+                                bootbox.alert(response.Message);
+                            }
+                        },
+                        error: function (ex) {
+                            bootbox.alert('Error occurred during processing');
+                        }
+                    })
+                }
+            });
+        }
+    }
+
+    function Back() {
+        location.href = '@Url.Action("Index", "User")';
+    }
+</script>

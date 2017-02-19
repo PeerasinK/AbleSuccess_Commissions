@@ -1,0 +1,133 @@
+﻿@model AbleSuccess.Commissions.WebUi.Models.UserCollectionViewModel
+
+@{
+    ViewBag.Header = "Users";
+}
+
+@Scripts.Render("~/bundles/jquery")
+@Styles.Render("~/Content/css")
+
+<div class="col-xs-12 menu-header">
+    @ViewBag.Header
+</div>
+<div class="container">
+    <div class="row header-row">
+        <div class="col-xs-12">
+            <div class="col-xs-12">
+                <div class="col-xs-2">
+                    @Html.DropDownList("SearchUserStatus", new SelectList(@Model.LookupUserStatus, "Key", "Value"), new { @class = "form-control" })
+                </div>
+                <div class="col-xs-2">
+                    @Html.DropDownList("SearchUserRole", new SelectList(@Model.LookupRole, "Key", "Value"), new { @class = "form-control" })
+                </div>
+                <div class="col-xs-4">
+                    @Html.TextBoxFor(model => model.SearchUsername, new { @class = "form-control", @placeholder = "Search by Username" })
+                </div>
+                <div class="col-xs-2">
+                    <input type="button" value="Search" class="btn btn-primary" style="width:90%" onclick="SearchUser()" />
+                </div>
+                <div class="col-xs-2">
+                    <input type="button" value="Create" class="btn btn-success" style="width:90%" onclick="CreateUser()" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br />
+<div id="UserList" class="container bootstrap snippet">
+    @Html.Partial("List")
+</div>
+
+
+<script type="text/javascript">
+    function SearchUser() {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            async: true,
+            cache: false,
+            url: '@Url.Action("List", "User")',
+            data: { username: $('#SearchUsername').val(), role: $('#SearchUserRole').val(), status: $('#SearchUserStatus').val() },
+            success: function (result) {
+                $('#UserList').html(result)
+            },
+            error: function (ex) {
+                bootbox.alert('Error occurred during processing');
+            }
+        });
+    }
+
+    function CreateUser() {
+        location.href = '@Url.Action("Detail", "User")' + '?id=-1';
+    }
+
+    function DetailUser(userId) {
+        location.href = '@Url.Action("Detail", "User")' + '?id=' + userId;
+    }
+
+    function ResetPassword(userId) {
+        bootbox.confirm("Do you want to confirm reset password ?", function (result) {
+            if (result == true) {
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    async: true,
+                    cache: false,
+                    url: '@Url.Action("ResetPassword", "User")',
+                    data: { id: userId },
+                    success: function (response) {
+                        bootbox.alert("Reset password successful.");
+                    },
+                    error: function (ex) {
+                        bootbox.alert('Error occurred during processing');
+                    }
+                });
+            }
+        });
+    }
+
+    function ActivateUser(userId) {
+        bootbox.confirm("Do you want to confirm reactivate ?", function (result) {
+            if (result == true) {
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    async: true,
+                    cache: false,
+                    url: '@Url.Action("Add", "User")',
+                    data: { id: userId, username: $('#SearchUsername').val(), role: $('#SearchUserRole').val(), status: $('#SearchUserStatus').val() },
+                    success: function (response) {
+                        bootbox.alert("User was activated.");
+                        $('#UserList').html(response);
+                    },
+                    error: function (ex) {
+                        bootbox.alert('Error occurred during processing');
+                    }
+                });
+            }
+        })
+    }
+
+    function DeactivateUser(userId) {
+        bootbox.confirm("Do you want to confirm remove ?", function (result) {
+            if (result == true) {
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    async: true,
+                    cache: false,
+                    url: '@Url.Action("Delete", "User")',
+                    data: { id: userId, username: $('#SearchUsername').val(), role: $('#SearchUserRole').val(), status: $('#SearchUserStatus').val() },
+                    success: function (response) {
+                        bootbox.alert("User was deactivated.");
+                        $('#UserList').html(response);
+                    },
+                    error: function (ex) {
+                        bootbox.alert('Error occurred during processing');
+                    }
+                });
+            }
+        })
+    }
+</script>

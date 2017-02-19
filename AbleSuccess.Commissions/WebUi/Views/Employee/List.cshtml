@@ -1,0 +1,56 @@
+﻿@using AbleSuccess.Commissions.WebUi.Models;
+@model EmployeeCollectionViewModel
+
+@Scripts.Render("~/bundles/jquery")
+@Styles.Render("~/Content/css")
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box no-header clearfix">
+            <div class="main-box-body clearfix">
+                <div class="table-responsive">
+                    <table class="table user-list">
+                        <tr>
+                            <th class="col-md-6">&nbsp;</th>
+                            <th><h4>Devision</h4></th>
+                            <th><h4>Telephone</h4></th>
+                            <th><h4>E-mail</h4></th>
+                        </tr>
+                        @foreach (EmployeeModel employee in Model.EmployeeCollection)
+                        {
+                            <tr>
+                                <td>
+                                    @if (!string.IsNullOrWhiteSpace(employee.Photo))
+                                    {
+                                        <img src="@employee.Photo" width="50" height="50" class="img-circle">
+                                    }
+                                    else
+                                    {
+                                        <img src="..\Contents\UserImages\no-image.jpg" class="img-circle">
+                                    }
+                                    <a href='@Url.Action("Detail", "Employee")?id=@employee.ProfileId' class="user-link" title="See profile">
+                                        @employee.FirstName @employee.LastName
+                                        @if (!string.IsNullOrWhiteSpace(employee.NickName))
+                                        {
+                                            @Html.Label("(" + @employee.NickName + ")", new { @style = "font-weight: normal" })
+                                        }
+                                    </a>
+                                    <span class="user-subhead">@employee.PositionName</span>
+                                </td>
+                                <td>
+                                    @employee.DevisionName
+                                </td>
+                                <td>
+                                    @employee.Telephone
+                                </td>
+                                <td>
+                                    <a href="mailto:@employee.Email">@employee.Email</a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

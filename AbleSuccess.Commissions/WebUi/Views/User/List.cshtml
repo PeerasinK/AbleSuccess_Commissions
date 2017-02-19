@@ -1,0 +1,66 @@
+﻿@using AbleSuccess.Commissions.WebUi.Models;
+@model UserCollectionViewModel
+
+@Scripts.Render("~/bundles/jquery")
+@Styles.Render("~/Content/css")
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box no-header clearfix">
+            <div class="main-box-body clearfix">
+                <div class="table-responsive">
+                    <table class="table user-list">
+                        <tr>
+                            <td class="col-md-5"><h4>Username</h4></td>
+                            <td><h4>Role</h4></td>
+                            <td><h4>Status</h4></td>
+                            <td class="col-md-1">&nbsp;</td>
+                            <td class="col-md-2">&nbsp;</td>
+                        </tr>
+                        @foreach (UserModel user in Model.UserCollection)
+                        {
+                            <tr>
+                                <td align="left">
+                                    @if (user.Role == 2)
+                                    {
+                                        <a href='@Url.Action("Detail", "User")?id=@user.UserId' title="See detail">
+                                            @user.Username
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href='#' title="See detail">
+                                            @user.Username
+                                        </a>
+                                    }
+                                </td>
+                                <td>
+                                    @user.RoleName
+                                </td>
+                                <td>
+                                    @user.StatusName
+                                </td>
+                                <td>
+                                    @if (user.Status == 1 && user.Role == 2)
+                                    {
+                                        <input type="button" value="Remove" class="btn btn-warning btn-sm" style="width:90%" onclick="DeactivateUser(@user.UserId)" />
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.Status == 1 && user.Role == 2)
+                                    {
+                                        <input type="button" value="Reset Password" class="btn btn-danger btn-sm" style="width:90%" onclick="ResetPassword(@user.UserId)" />
+                                    }
+                                    else if (user.Status == 0 && user.Role == 2)
+                                    {
+                                        <input type="button" value="Reactivate" class="btn btn-success btn-sm" style="width:90%" onclick="ActivateUser(@user.UserId)" />
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

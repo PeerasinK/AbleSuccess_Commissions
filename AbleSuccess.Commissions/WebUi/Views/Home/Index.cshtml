@@ -1,0 +1,160 @@
+﻿@using AbleSuccess.Commissions.WebUi.Common;
+@model AbleSuccess.Commissions.WebUi.Models.ReportViewModel
+
+@{
+    ViewBag.Header = "Dashboard";
+}
+@Scripts.Render("~/bundles/jquery")
+@Styles.Render("~/Content/css")
+<div class="col-xs-12 menu-header">
+    @if (Helper.UserRole != "0")
+    {
+        @ViewBag.Header
+    }
+</div>
+<div class="container">
+    <div class="row header-row">
+        <div class="col-md-12">
+            <div class="col-md-10">
+                <div id="chartContainer" style="height: 450px; width: 100%;">
+                    <input id="userRole" type="hidden" value="@Helper.UserRole" />
+                </div>
+            </div>
+            @if (Helper.UserRole != "0")
+            {
+                <div class="col-md-2">
+                    <br />
+                    <table>
+                        @*Report Type*@
+                        <tr>
+                            <td colspan="2">
+                                <h4><strong>Report Type</strong></h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.RadioButtonFor(x => x.ReportType, "0") Revenue
+                            </td>
+                            <td>
+                                @Html.RadioButtonFor(x => x.ReportType, "1") Profit
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                &nbsp;
+                            </td>
+                        </tr>
+                        @*Report SubType*@
+                        <tr>
+                            <td colspan="2">
+                                <h4><strong>Report Sub Type</strong></h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.RadioButtonFor(x => x.ReportSubType, 0) Monthly
+                            </td>
+                            <td>
+                                @Html.RadioButtonFor(x => x.ReportSubType, 1) Quarter
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                &nbsp;
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">
+                                @Html.DropDownList("Year", new SelectList(@Model.LookupYear, "Key", "Value"), new { @class = "form-control" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                &nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <input type="button" value="Regenerate chart" class="btn btn-success btn-block" style="width: 90%" onclick="renderChart()"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                &nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <input type="button" value="Print" class="btn btn-default btn-block" style="width:90%" onclick="printPage()" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    init();
+
+    function printPage() {
+        window.print();
+    }
+
+    function init() {
+        renderChart();
+    }
+
+    function getTitle() {
+        var title = '';
+
+        if ($("#Year").val() == null) {
+            title = 'No data';
+        } else {
+
+            if ($('input[name="ReportType"]:checked').val() == 0) title += 'Revenue';
+            else if ($('input[name="ReportType"]:checked').val() == 1) title += 'Profit';
+
+            title += ' Year ' + $("#Year").val();
+        }
+
+        return title;
+    }
+
+    function renderChart() {
+        if ($("#userRole").val() != 0) {
+            if ($("#Year").val() != null) {
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    async: true,
+                    cache: false,
+                    url: '@Url.Action("Report", "Home")',
+                    data: { type: $('input[name="ReportType"]:checked').val(), subType: $('input[name="ReportSubType"]:checked').val(), year: $("#Year").val() },
+                    success: function (result) {
+
+                        var chart = new CanvasJS.Chart("chartContainer",
+                        {
+                            animationEnabled: true,
+                            title: {
+                                text: getTitle()
+                            },
+                            data: [{
+                                type: "column", //change type to bar, line, area, pie, etc
+                                dataPoints: result.data
+                            }]
+                        });
+
+                        chart.render();
+                    },
+                    error: function (ex) {
+                        bootbox.alert('Error occurred during processing');
+                    }
+                });
+            }
+        }
+    }
+</script>

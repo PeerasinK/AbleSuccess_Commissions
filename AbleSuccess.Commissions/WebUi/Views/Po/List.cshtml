@@ -1,0 +1,101 @@
+﻿@using AbleSuccess.Commissions.WebUi.Models;
+@model PoCollectionViewModel
+
+@*@Scripts.Render("~/bundles/jquery")
+@Styles.Render("~/Content/css")*@
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="main-box no-header clearfix">
+            <div class="main-box-body clearfix">
+                <div class="table-responsive">
+                    <table class="table user-list">
+                        <tr>
+                            <td class="col-md-2"><h4>Date</h4></td>
+                            <td class="col-md-4"><h4>Customer</h4></td>
+                            <td align="center" class="col-md-2"><h4>Revenue</h4></td>
+                            <td align="center" class="col-md-2"><h4>Total Cost</h4></td>
+                            <td align="center" class="col-md-2"><h4>Profit</h4></td>
+                        </tr>
+
+                        @foreach (PoViewModel po in Model.PoCollection)
+                        {
+                            <tr onclick="collaseDetail('Detail_@po.PoId')">
+                                <td align="left">
+                                    <span style="font-size: small">
+                                        @po.PoDate.ToString("dd MMM yyyy")
+                                    </span>
+                                </td>
+                                <td>
+                                    <span style="font-size: small; color: grey">@po.PoNumber</span><br>
+                                    <span style="font-size: x-large"><strong>@po.CustomerName</strong></span>
+                                </td>
+                                <td align="right">
+                                    <span style="font-size: small"><strong>@po.SumTotalPrice.ToString("c").Substring(1)</strong></span>
+                                </td>
+                                <td align="right">
+                                    <span style="font-size: small"><strong>@po.SumTotalCost.ToString("c").Substring(1)</strong></span>
+                                </td>
+                                <td align="right">
+                                    <span style="font-size: small"><strong>@po.SumProfit.ToString("c").Substring(1)</strong></span>
+                                </td>
+                            </tr>
+                            foreach (PoDetailModel poDetail in po.PoDetailCollection)
+                            {
+                                <tr bgcolor="#FAFAFA" id="Detail_@po.PoId">
+                                    <td align="left">
+                                        &nbsp;
+                                    </td>
+                                    <td>
+                                        @*<a href='@Url.Action("Detail", "Po")?detailId=@poDetail.PoDetailId' title="See detail">
+                                            @poDetail.ProductName
+                                        </a>*@
+                                        <a onclick="SeeDetail(@poDetail.PoDetailId)" style="cursor: pointer" title="See detail">
+                                            @poDetail.ProductName
+                                        </a>
+                                    </td>
+                                    <td align="right">
+                                        @poDetail.TotalPrice.ToString("c").Substring(1)
+                                    </td>
+                                    <td align="right">
+                                        @poDetail.TotalCost.ToString("c").Substring(1)
+                                    </td>
+                                    <td align="right">
+                                        @poDetail.Profit.ToString("c").Substring(1)
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        <tr>
+                            <td colspan="5"></td>
+                        </tr>
+                        <tr>
+                            <td align="left">
+                                &nbsp;
+                            </td>
+                            <td>
+                                <span style="font-size: medium"><strong>Total Summary </strong></span>
+                            </td>
+                            <td align="right">
+                                <span style="font-size: medium"><strong>@Model.SumAllTotalPrice.ToString("c").Substring(1)</strong></span>
+                            </td>
+                            <td align="right">
+                                <span style="font-size: medium"><strong>@Model.SumAllTotalCost.ToString("c").Substring(1)</strong></span>
+                            </td>
+                            <td align="right">
+                                <span style="font-size: medium"><strong>@Model.SumAllProfit.ToString("c").Substring(1)</strong></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    function SeeDetail(id) {
+        window.location = '@Url.Action("Detail", "Po")' + '?detailId=' + id;
+    }
+
+</script>

@@ -1,0 +1,123 @@
+﻿@using AbleSuccess.Commissions.WebUi.Common;
+@model AbleSuccess.Commissions.WebUi.Models.CommissionCollectionViewModel
+@{
+    ViewBag.Header = "Commissions";
+}
+
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<div class="col-xs-12 menu-header">
+    @ViewBag.Header
+</div>
+<div class="container">
+    <div class="row header-row">
+        <div class="col-xs-12">
+            <div class="col-xs-9">
+                <div class="col-xs-5">
+                    <div class="col-xs-5">
+                        @Html.TextBoxFor(model => model.SearchDateFrom, "{0:dd MMM yyyy}", new { @class = "form-control", @placeholder = "Date From", @onchange = "OnChangePoDate('#SearchDateFrom');" })
+                    </div>
+                    <div class="col-xs-1">
+                        <center>To</center>
+                    </div>
+                    <div class="col-xs-5">
+                        @Html.TextBoxFor(model => model.SearchDateTo, "{0:dd MMM yyyy}", new { @class = "form-control", @placeholder = "Date To", @onchange = "OnChangePoDate('#SearchDateTo');" })
+                    </div>
+                </div>
+                <div class="col-xs-7">
+                    <div class="col-xs-7">
+                        @if (Helper.UserRole != "2")
+                        {
+                            @Html.DropDownList("SearchProfileId", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control" })
+                        }
+                    </div>
+                    <div class="col-xs-5">
+                        @Html.DropDownList("SearchRoleId", new SelectList(@Model.LookupPosition, "Key", "Value"), new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <div class="col-xs-6">
+                    <input type="button" value="Search" class="btn btn-primary" style="width: 90%" onclick="SearchCommission()" />
+                </div>
+                <div class="col-xs-6">
+                    <input type="button" value="Report" class="btn btn-default btn-block" style="width:90%" onclick="printPage()" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <input id="userRole" type="hidden" value="@Helper.UserRole" />
+    <br />
+    <div id="CommissionList" class="container bootstrap snippet">
+        @Html.Partial("List")
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#SearchDateFrom").datepicker();
+        $("#SearchDateTo").datepicker();
+    });
+
+    function printPage() {
+        var id = $('#SearchProfileId').val();
+        var role = $("#userRole").val();
+        var roleId = $('#SearchRoleId').val()
+        var dateFrom = $('#SearchDateFrom').val();
+        var dateTo = $('#SearchDateTo').val()
+        var condition;
+
+        if (role != 2) {
+            condition = "?dateFrom=" + dateFrom + "&dateTo=" + dateTo + "&profileId=" + id + "&roleId=" + roleId;
+        }
+        else {
+            condition = "?dateFrom=" + dateFrom + "&dateTo=" + dateTo + "&roleId=" + roleId;
+        }
+        var url = '@Url.Action("PrintReport", "Commission")';
+        window.location = url + condition;
+    }
+
+    function OnChangePoDate(id) {
+        var date = new Date($(id).val()).toDateString();
+        var split = date.split(' ');
+        $(id).val(split[2] + ' ' + split[1] + ' ' + split[3]);
+    }
+
+    function SearchCommission() {
+
+        var id = $('#SearchProfileId').val();
+        var role = $("#userRole").val();
+
+        if ((id === undefined || id < 0) && role != 2) {
+            bootbox.alert('Please select employee');
+        }
+        else {
+
+            var data;
+
+            if (role != 2) data = { profileId: id, dateFrom: $('#SearchDateFrom').val(), dateTo: $('#SearchDateTo').val(), roleId: $('#SearchRoleId').val() };
+            else data = { dateFrom: $('#SearchDateFrom').val(), dateTo: $('#SearchDateTo').val(), roleId: $('#SearchRoleId').val() };
+
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                async: true,
+                cache: false,
+                url: '@Url.Action("List", "Commission")',
+                data: data,
+                success: function (result) {
+                    $('#CommissionList').html(result)
+                },
+                error: function (ex) {
+                    bootbox.alert('Error occurred during processing');
+                }
+            });
+        }
+    }
+
+    function DetailCommission(poDetailId) {
+        location.href = '@Url.Action("Detail", "Po")' + '?detailId=' + poDetailId;
+    }
+
+</script>

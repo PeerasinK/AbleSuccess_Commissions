@@ -1,0 +1,1054 @@
+﻿@using AbleSuccess.Commissions.WebUi.Common;
+@model AbleSuccess.Commissions.WebUi.Models.PoDetailViewModel
+
+@{
+    if (ViewBag.Action == "Edit")
+    {
+        ViewBag.Header = "PO Detail";
+    }
+    else
+    {
+        ViewBag.Header = "New PO";
+    }
+}
+
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<div class="col-xs-12 menu-header">
+    @ViewBag.Header
+</div>
+<div class="container">
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "PoDetailForm" }))
+    {
+        @*HIDDEN*@
+        @Html.Hidden("PoId", @Model.PoId)
+        @Html.Hidden("PoDetailId", @Model.PoDetailId)
+        @Html.Hidden("CommissionPayRate", @Model.CommissionPayRate)
+        @Html.Hidden("CommissionForSale", @Model.CommissionForSale)
+
+        @*PO HEADER*@
+        <div class="col-md-12">
+            <div class="col-md-12">
+                <div class="col-md-12 well">
+                    <table class="col-md-12">
+                        <tr>
+                            <td>
+                                <div class="col-md-6">
+                                    <table class="col-md-12">
+                                        <tr>
+                                            <td class="col-md-4"> <strong>Customer : </strong> </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control", @placeholder = "Customer Name" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-4"><strong>PO Number : </strong></td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.PoNumber, new { @class = "form-control", @placeholder = "Po Number" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-4"><strong>Purchase Date: </strong></td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.PoDate, "{0:dd MMM yyyy}", new { @class = "form-control", @placeholder = "Purchase Date", @onchange = "OnChangePoDate();" })
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <table class="col-md-12">
+                                        <tr>
+                                            <td class="col-md-4"><strong>Product Name:</strong> </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.ProductName, new { @class = "form-control", @placeholder = "Product Name" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-4"><strong>Product Brand:</strong> </td>
+                                            <td>
+                                                @*@Html.TextBoxFor(model => model.ProductBrand, new { @class = "form-control", @placeholder = "Product Brand" })*@
+                                                @Html.DropDownList("ProductBrand", new SelectList(@Model.LookupProductBrand, "Key", "Value"), new { @class = "form-control" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-4"><strong>Product Type:</strong> </td>
+                                            <td>
+                                                @Html.DropDownList("ProductType", new SelectList(@Model.LookupProductType, "Key", "Value"), new { @class = "form-control", @onchange = "changeProductType()" })
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        @*DETAIL & COMMISSIONS*@
+        <div class="col-md-12">
+            <div class="col-md-7">
+                <div class="col-md-12 well" style="min-height: 580px;max-height: 580px;">
+                    <h2>Detail</h2>
+                    <table class="col-md-12">
+                        <tr>
+                            <td class="col-md-8"><strong>Price/Unit : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.PricePerUnit, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Price/Unit", @onchange = "changePricePerUnit();" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Actual price/Unit : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.ActualPricePerUnit, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Actual price/Unit", @onchange = "changeActualPricePerUnit();" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Amount : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Amount, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Amount", @onchange = "changeAmount();" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Total price : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.TotalPrice, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Total Price", @onchange = "OnChangePoDate();", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Total actual price : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.ActualTotalPrice, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Total actual price", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>w/d Tax : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Tax, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Tax", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Transportation location : </strong></td>
+                            <td>
+                                @Html.DropDownList("TransportLocation", new SelectList(@Model.LookupTransportLocation, "Key", "Value"), new { @class = "form-control", @onchange = "checkTransportFee();" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Transportation fee : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.TransportFee, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Transportation Fee", @onchange = "changeTransportFee();" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Parcel fee : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.ParcelFee, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Parcel fee", @onchange = "changeParcelFee();" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Service fee : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.ServiceFee, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Service fee", @onchange = "changeServiceFee();" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Other fee : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.OtherFee, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Other Fee", @onchange = "changeOtherFee();" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Commission Customer Lead (%): </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.CustomerLeadPercentage, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Customer Lead (%)", @onchange = "changeCustomerLead(true);" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Commission Customer Lead: </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.CustomerLead, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Customer Lead", @onchange = "changeCustomerLead(false);" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Total cost : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.TotalCost, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Total Cost", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Profit : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Profit, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Profit", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Profit (%) : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.ProfitPercentage, new { @class = "form-control", @style = "text-align:right;", @placeholder = "Profit (%)", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr class="col-md-pull-9">
+                            <td class="col-md-8"><strong>Total Commission : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Commission.TotalCommission, new { @class = "form-control", @style = "text-align:right;", @placeholder = "0.00", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="col-md-12 well" style="min-height: 580px;max-height: 580px;">
+                    <h2>Commission <span class="pull-right"> <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#CommissionRate"> Show Rate </button> </span></h2>
+                    <table class="col-md-12">
+                        <tr>
+                            <td class="col-md-8"><strong>Sales : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Commission.CommissionSales, new { @class = "form-control", @style = "text-align:right;", @placeholder = "0.00", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Product Manager : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Commission.CommissionPM, new { @class = "form-control", @style = "text-align:right;", @placeholder = "0.00", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Application,Support : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Commission.CommissionApp, new { @class = "form-control", @style = "text-align:right;", @placeholder = "0.00", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Installation,Delivery : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Commission.CommissionInstall, new { @class = "form-control", @style = "text-align:right;", @placeholder = "0.00", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>Admin : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Commission.CommissionAdmin, new { @class = "form-control", @style = "text-align:right;", @placeholder = "0.00", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>&nbsp;@*Total Sales :*@ </strong></td>
+                            <td>
+                                &nbsp;@*@Html.TextBoxFor(model => model.Commission.ConclusionCommission, new { @class = "form-control", @style = "text-align:right;", @placeholder = "0.00", @readonly = "readonly" })*@
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-8"><strong>@*<input type="checkbox" id="CommissionOsFlag" onclick="calculateCommissionOs()">*@ Outsite Lead : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Commission.CommissionOutside, new { @class = "form-control", @style = "text-align:right;", @placeholder = "0.00", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                    </table>
+                    <table style="margin:260px 0px 0px 0px">
+                        <tr>
+                            <td class="col-md-8"><strong>Verify Commission : </strong></td>
+                            <td>
+                                @Html.TextBoxFor(model => model.Commission.AuditCommission, new { @class = "form-control", @style = "text-align:right;", @placeholder = "0.00", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        @*MODAL*@
+        <div class="modal fade" id="CommissionRate" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" onclick="resetChangeRate()">&times;</button>
+                        <h4 class="modal-title"><strong>Commission Rate</strong></h4>
+                        <table class="col-sm-12">
+                            <tr>
+                                <td>
+                                    Customer: @Model.CustomerName, PO Number: @Model.PoNumber, Purchase Date: @Model.PoDate.ToString("dd MMM yyyy"), Product Name: @Model.ProductName
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-body">
+                        <table class="col-sm-12">
+                            <tr>
+                                <td align="right">
+                                    &nbsp;
+                                </td>
+                                <td class="text-center">
+                                    <strong>Rate (%)</strong>
+                                </td>
+                                <td class="text-center">
+                                    <strong>Person in charge</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="vertical-align:top">
+                                    <strong>Sales : </strong>
+                                </td>
+                                <td class="text-center" style="vertical-align:top">
+                                    @Html.TextBoxFor(model => model.CommissionRate.SalesPercentage, new { @class = "form-control", @style = "text-align:right;", onblur = "calculateTotalRate()" })
+                                </td>
+                                <td class="text-center">
+                                    <div id="ddSales">
+                                        @Html.DropDownList("SalesProfileId1", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control", onchange = "checkShowHideDropdownProfile()" })
+                                        @Html.DropDownList("SalesProfileId2", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control", onchange = "checkShowHideDropdownProfile()" })
+                                        @Html.DropDownList("SalesProfileId3", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="vertical-align:top">
+                                    <strong>Product Manager : </strong>
+                                </td>
+                                <td class="text-center" style="vertical-align:top">
+                                    @Html.TextBoxFor(model => model.CommissionRate.PmPercentage, new { @class = "form-control", @style = "text-align:right;", onblur = "calculateTotalRate()" })
+                                </td>
+                                <td class="text-center">
+                                    <div id="ddPm">
+                                        @Html.DropDownList("PmProfileId1", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control", onchange = "checkShowHideDropdownProfile()" })
+                                        @Html.DropDownList("PmProfileId2", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control", onchange = "checkShowHideDropdownProfile()" })
+                                        @Html.DropDownList("PmProfileId3", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="vertical-align:top">
+                                    <strong>Application/Support : </strong>
+                                </td>
+                                <td class="text-center" style="vertical-align:top">
+                                    @Html.TextBoxFor(model => model.CommissionRate.AppSupportPercentage, new { @class = "form-control", @style = "text-align:right;", onblur = "calculateTotalRate()" })
+                                </td>
+                                <td class="text-center">
+                                    <div id="ddAppSupport">
+                                        @Html.DropDownList("AppSupportProfileId1", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control", onchange = "checkShowHideDropdownProfile()" })
+                                        @Html.DropDownList("AppSupportProfileId2", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control", onchange = "checkShowHideDropdownProfile()" })
+                                        @Html.DropDownList("AppSupportProfileId3", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="vertical-align:top">
+                                    <strong>Installation/Delivery : </strong>
+                                </td>
+                                <td class="text-center" style="vertical-align:top">
+                                    @Html.TextBoxFor(model => model.CommissionRate.InstallDeliveryPercentage, new { @class = "form-control", @style = "text-align:right;", onblur = "calculateTotalRate()" })
+                                </td>
+                                <td class="text-center">
+                                    <div id="ddInstallDelivery">
+                                        @Html.DropDownList("InstallDeliveryProfileId1", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control", onchange = "checkShowHideDropdownProfile()" })
+                                        @Html.DropDownList("InstallDeliveryProfileId2", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control", onchange = "checkShowHideDropdownProfile()" })
+                                        @Html.DropDownList("InstallDeliveryProfileId3", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="vertical-align:top">
+                                    <strong>Admin : </strong>
+                                </td>
+                                <td class="text-center" style="vertical-align:top">
+                                    @Html.TextBoxFor(model => model.CommissionRate.AdminPercentage, new { @class = "form-control", @style = "text-align:right;", onblur = "calculateTotalRate()" })
+                                </td>
+                                <td class="text-center">
+                                    <div id="ddAdmin">
+                                        @Html.DropDownList("AdminProfileId1", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control", onchange = "checkShowHideDropdownProfile()" })
+                                        @Html.DropDownList("AdminProfileId2", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control", onchange = "checkShowHideDropdownProfile()" })
+                                        @Html.DropDownList("AdminProfileId3", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="vertical-align:top">
+                                    <strong>Outsite Lead : </strong>
+                                </td>
+                                <td class="text-center" style="vertical-align:top">
+                                    @Html.TextBoxFor(model => model.CommissionRate.OsPercentage, new { @class = "form-control", @style = "text-align:right;", onblur = "calculateTotalRate()" })
+                                </td>
+                                <td class="text-center">
+                                    <div id="ddOs">
+                                        @Html.DropDownList("OsProfileId1", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control", onchange = "checkShowHideDropdownProfile()" })
+                                        @Html.DropDownList("OsProfileId2", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control", onchange = "checkShowHideDropdownProfile()" })
+                                        @Html.DropDownList("OsProfileId3", new SelectList(@Model.LookupEmployee, "Key", "Value"), new { @class = "form-control" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="vertical-align:top">
+                                    <strong>Total : </strong>
+                                </td>
+                                <td class="text-center" style="vertical-align:top">
+                                    <input id="CommissionRate_TotalPercentage" type="text" class="list-header-right form-control" style="text-align:right;" disabled />
+                                </td>
+                                <td class="text-center" style="color:red;">
+                                    &nbsp;
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" onclick="printModal('#CommissionRate')"> Print</button>
+                        @if (Helper.UserRole == "2" && @Model.IsOwner == true)
+                        {
+                            <button type="button" class="btn btn-default" onclick="saveRate()">Save</button>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        if (Helper.UserRole == "2" && @Model.IsOwner == true)
+        {
+            @*BUTTON*@
+            <div class="col-md-12 text-center">
+                <div class="col-xs-12 col-md-4">
+                    <input type="button" class="btn btn-primary btn-block" onclick="SavePo()" value="Save PO" />
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    @if (ViewBag.Action == "Edit")
+                    {
+                        <input type="button" class="btn btn-danger btn-block" onclick="DeletePo()" value="Delete PO" />
+                    }
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <input type="button" class="btn btn-warning btn-block" onclick="ClearForm()" value="Clear form" />
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<script type="text/javascript">
+
+    var taxRate = 0;
+
+    $(document).ready(function () {
+        calculateTotalRate();
+        backupOriginalRate();
+        $("#PoDate").datepicker();
+        //if ($("#Commission_CommissionOutside").val() > 0)
+        //    document.getElementById("CommissionOsFlag").checked = true;
+    });
+
+    function OnChangePoDate() {
+        var date = new Date($("#PoDate").val()).toDateString();
+        var split = date.split(' ');
+        $("#PoDate").val(split[2] + ' ' + split[1] + ' ' + split[3]);
+    }
+
+    function isEmpty(str) {
+        return (!str || 0 === str.length);
+    }
+
+    function isNotSelected(value) {
+        return value == -1;
+    }
+
+    function isValidForm() {
+        var validate = '';
+
+        if (isEmpty($('#CustomerName').val())) validate += "- CustomerName<br>";
+        if (isEmpty($('#PoNumber').val())) validate += "- Po Number<br>";
+        if (isEmpty($('#ProductName').val())) validate += "- Product Name<br>";
+        if (isNotSelected($('#ProductBrand').val())) validate += "- Product Brand<br>";
+        if (isNotSelected($('#ProductType').val())) validate += "- Product Type<br>";
+
+        if ($('#PricePerUnit').val() <= 0) validate += "- Price/Unit<br>";
+        if ($('#ActualPricePerUnit').val() <= 0) validate += "- Actual Price/Unit<br>";
+        if ($('#Amount').val() <= 0) validate += "- Amount<br>";
+        if ($("#TransportFee").val() <= 0 && $("#ParcelFee").val() <= 0) validate += "- TransportFee OR ParcelFee<br>";
+
+        if ($("#TransportFee").val() > 0 && isNotSelected($('#TransportLocation').val())) validate += "- Transportation location<br>";
+
+        if (validate != '') {
+            bootbox.alert('<h4>Please input all these data:</h4>' + validate);
+            return false;
+        } else return true;
+    }
+
+    function isValidProductType() {
+
+        // Product Type:
+        // 1 Software
+        // 2 Hardware
+        // 3 Machine
+        // 4 Training
+        // 5 Support & Service
+
+        var allowedPairs =
+            {
+                1: "1",	    // Autodesk PSEB
+                2: "1",     // Autodesk MFG
+                3: "1",     // Adobe
+                4: "1",     // Microsoft
+                5: "2",     // Dell
+                6: "2",     // HP
+                7: "1",     // SketchUp
+                8: "1",      // Autodesk AEC
+                //9 Other can be all type
+                10: "1"      // Autodesk M&E
+            };
+
+        var allowedType = allowedPairs[$('#ProductBrand').val()];
+
+        // If not in list means allow all
+        if (allowedType) {
+            var arrAllowedType = allowedType.split(",");
+
+            if (arrAllowedType.indexOf($('#ProductType').val()) == -1) {
+                bootbox.alert('Invalid product type');
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function SavePo() {
+        if (isValidForm() && checkTransportFee() && validateRate() && isValidProductType()) {
+            bootbox.confirm("Do you want to confirm ?", function (result) {
+                if (result == true) {
+
+                    var actionUrl;
+                    if ('@ViewBag.Action' == "Edit") actionUrl = '@Url.Action("Edit", "Po")';
+                    else actionUrl = '@Url.Action("New", "Po")';
+
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        async: true,
+                        cache: false,
+                        url: actionUrl,
+                        data: $('#PoDetailForm').serialize(),
+                        success: function (response) {
+                            if (response.Result) {
+                                bootbox.alert("Save successful");
+                                if ('@ViewBag.Action' == "New") window.location = response.Url
+                            }
+                            else {
+                                bootbox.alert(response.Message);
+                            }
+                        },
+                        error: function (ex) {
+                            bootbox.alert('Error occurred during processing');
+                        }
+                    })
+                }
+            });
+        }
+    }
+
+    function ClearForm() {
+        location.reload();
+    }
+
+    function DeletePo() {
+        bootbox.confirm("Do you want to confirm remove ?", function (result) {
+            if (result == true) {
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    async: true,
+                    cache: false,
+                    url: '@Url.Action("Remove", "Po")',
+                    data: { detailId: $('#PoDetailId').val() },
+                    success: function (response) {
+                        bootbox.alert("PO was deleted.");
+                        window.location = response.Url
+                    },
+                    error: function (ex) {
+                        bootbox.alert('Error occurred during processing');
+                    }
+                });
+            }
+        })
+    }
+
+    // +++++++++++++++ Header +++++++++++++++ //
+
+    function checkTransportFee() {
+        var value = $("#TransportLocation option:selected").text();
+        var condition = value.split(' ').pop().replace(')', '');
+
+        if (parseFloat($("#TransportFee").val()) < parseFloat(condition)) {
+            bootbox.alert('Transport Fee cannot lower than ' + condition);
+            return false;
+        }
+        return true;
+    }
+
+    function changeProductType() {
+        var value = $("#ProductType option:selected").text();
+        var taxPercentage = value.split('__').pop().replace('%', '');
+        taxRate = parseFloat(taxPercentage) / 100;
+
+        calculateTax();
+        calculateTotalPrice();
+        calculateActualTotalPrice();
+    }
+
+
+    // +++++++++++++++ Commission +++++++++++++++ //
+
+    var osFlag = false;
+
+
+    var originCommissionSale;
+    var originCommissionPm;
+    var originCommissionSupport;
+    var originCommissionInstall;
+
+    function changePricePerUnit() {
+        var pricePerUnit = document.getElementById("PricePerUnit");
+
+        calculateTotalPrice();
+        calculateTax();
+    }
+
+    function changeActualPricePerUnit() {
+        var actualPricePerUnit = document.getElementById("ActualPricePerUnit");
+
+        calculateActualTotalPrice();
+    }
+
+    function changeAmount() {
+        calculateTotalPrice();
+        calculateActualTotalPrice();
+        calculateTax();
+        calculateTotalCost();
+    }
+
+    function changeTransportFee() {
+        checkTransportFee();
+        calculateTotalCost();
+    }
+
+    function changeParcelFee() {
+        calculateTotalCost();
+    }
+
+    function changeServiceFee() {
+        calculateTotalCost();
+    }
+
+    function changeOtherFee() {
+        calculateTotalCost();
+    }
+
+    function changeCustomerLead(isPercentage) {
+        var customerLeadPercentage = document.getElementById("CustomerLeadPercentage");
+        var customerLead = document.getElementById("CustomerLead");
+        var totalPrice = document.getElementById("TotalPrice");
+
+        if (isPercentage) {
+            customerLeadPercentage.value = parseFloat(customerLeadPercentage.value);
+            customerLead.value = parseFloat(customerLeadPercentage.value) * parseFloat(totalPrice.value) / 100;
+        } else {
+            customerLeadPercentage.value = "0";
+        }
+
+        calculateTotalCost();
+    }
+
+    function calculateTotalPrice() {
+        var pricePerUnit = document.getElementById("PricePerUnit");
+        var amount = document.getElementById("Amount");
+        var totalPrice = document.getElementById("TotalPrice");
+
+        totalPrice.value = pricePerUnit.value * amount.value;
+
+        calculateProfit();
+    }
+
+    function calculateActualTotalPrice() {
+        var actualPricePerUnit = document.getElementById("ActualPricePerUnit");
+        var amount = document.getElementById("Amount");
+        var actualTotalPrice = document.getElementById("ActualTotalPrice");
+
+        actualTotalPrice.value = actualPricePerUnit.value * amount.value;
+
+        calculateTotalCost();
+    }
+
+    function calculateTax() {
+        var tax = document.getElementById("Tax");
+        var totalPrice = document.getElementById("TotalPrice");
+
+        tax.value = totalPrice.value * taxRate;
+    }
+
+    function calculateTotalCost() {
+        var ActualTotalPrice = document.getElementById("ActualTotalPrice");
+        var tax = document.getElementById("Tax");
+        var TransportFee = document.getElementById("TransportFee");
+        var parcelFee = document.getElementById("ParcelFee");
+        var serviceFee = document.getElementById("ServiceFee");
+        var otherFee = document.getElementById("OtherFee");
+        var customerLead = document.getElementById("CustomerLead");
+        var totalCost = document.getElementById("TotalCost");
+
+        totalCost.value = parseFloat(ActualTotalPrice.value)
+            + parseFloat(tax.value)
+            + parseFloat(TransportFee.value)
+            + parseFloat(parcelFee.value)
+            + parseFloat(serviceFee.value)
+            + parseFloat(otherFee.value)
+            + parseFloat(customerLead.value);
+
+        calculateProfit();
+    }
+
+    function calculateProfit() {
+        var totalPrice = document.getElementById("TotalPrice");
+        var totalCost = document.getElementById("TotalCost");
+        var profit = document.getElementById("Profit");
+        var profitPercentage = document.getElementById("ProfitPercentage");
+
+        profit.value = parseFloat(totalPrice.value) - parseFloat(totalCost.value);
+        if (profit.value > 0) profitPercentage.value = (100 * parseFloat(profit.value)) / parseFloat(totalPrice.value);
+        else profitPercentage.value = 0;
+
+        calculateTotalCommission();
+    }
+
+    function calculateTotalCommission() {
+        //var commissionTotalSale = document.getElementById("Commission_ConclusionCommission");
+        var commissionOs = document.getElementById("Commission_CommissionOutside");
+
+        var commissionSale = document.getElementById("Commission_CommissionSales");
+        var commissionPm = document.getElementById("Commission_CommissionPM");
+        var commissionSupport = document.getElementById("Commission_CommissionApp");
+        var commissionInstall = document.getElementById("Commission_CommissionInstall");
+
+        var profit = document.getElementById("Profit");
+        var totalCommission = document.getElementById("Commission_TotalCommission");
+
+        totalCommission.value = parseFloat(profit.value) * parseFloat(document.getElementById("CommissionPayRate").value) * parseFloat(document.getElementById("CommissionForSale").value);
+
+
+        calculateCommissionSale();
+        calculateCommissionPm();
+        calculateCommissionSupport();
+        calculateCommissionInstall();
+        calculateCommissionAdmin();
+        //calculateCommissionTotalSale();
+        calculateCommissionOs();
+        calculateCommissionVerify();
+
+        setDecimalFormat();
+    }
+
+    function calculateCommissionSale() {
+        var totalCommission = document.getElementById("Commission_TotalCommission");
+        var commissionSale = document.getElementById("Commission_CommissionSales");
+
+        commissionSale.value = parseFloat(totalCommission.value) * (parseFloat($('#CommissionRate_SalesPercentage').val()) / 100);
+    }
+
+    function calculateCommissionPm() {
+        var totalCommission = document.getElementById("Commission_TotalCommission");
+        var commissionPm = document.getElementById("Commission_CommissionPM");
+
+        commissionPm.value = parseFloat(totalCommission.value) * (parseFloat($('#CommissionRate_PmPercentage').val()) / 100);
+    }
+
+    function calculateCommissionSupport() {
+        var totalCommission = document.getElementById("Commission_TotalCommission");
+        var commissionSupport = document.getElementById("Commission_CommissionApp");
+
+        commissionSupport.value = parseFloat(totalCommission.value) * (parseFloat($('#CommissionRate_AppSupportPercentage').val()) / 100);
+    }
+
+    function calculateCommissionInstall() {
+        var totalCommission = document.getElementById("Commission_TotalCommission");
+        var commissionInstall = document.getElementById("Commission_CommissionInstall");
+
+        commissionInstall.value = parseFloat(totalCommission.value) * (parseFloat($('#CommissionRate_InstallDeliveryPercentage').val()) / 100);
+    }
+
+    function calculateCommissionAdmin() {
+        var totalCommission = document.getElementById("Commission_TotalCommission");
+        var commissionAdmin = document.getElementById("Commission_CommissionAdmin");
+
+        commissionAdmin.value = parseFloat(totalCommission.value) * (parseFloat($('#CommissionRate_AdminPercentage').val()) / 100);
+    }
+
+    function calculateCommissionTotalSale() {
+        var commissionSale = document.getElementById("Commission_CommissionSales");
+        var commissionPm = document.getElementById("Commission_CommissionPM");
+        var commissionSupport = document.getElementById("Commission_CommissionApp");
+        var commissionInstall = document.getElementById("Commission_CommissionInstall");
+        var commissionTotalSale = document.getElementById("Commission_ConclusionCommission");
+
+        commissionTotalSale.value = parseFloat(commissionSale.value)
+            + parseFloat(commissionPm.value)
+            + parseFloat(commissionSupport.value)
+            + parseFloat(commissionInstall.value);
+    }
+
+    function calculateCommissionOs() {
+
+        //var osFlag = document.getElementById("CommissionOsFlag")
+        //var commissionTotalSale = document.getElementById("Commission_ConclusionCommission");
+        var commissionOs = document.getElementById("Commission_CommissionOutside");
+
+        var commissionSale = document.getElementById("Commission_CommissionSales");
+        //var commissionPm = document.getElementById("Commission_CommissionPM");
+        //var commissionSupport = document.getElementById("Commission_CommissionApp");
+        //var commissionInstall = document.getElementById("Commission_CommissionInstall");
+
+        //if (osFlag.checked) {
+
+        originCommissionSale = commissionSale.value;
+        //originCommissionPm = commissionPm.value;
+        //originCommissionSupport = commissionSupport.value;
+        //originCommissionInstall = commissionInstall.value;
+
+        commissionOs.value = parseFloat(commissionSale.value) * (parseFloat($('#CommissionRate_OsPercentage').val()) / 100);
+        commissionSale.value = parseFloat(originCommissionSale) * parseFloat(1 - (parseFloat($('#CommissionRate_OsPercentage').val()) / 100));
+        //commissionOs.value = parseFloat(commissionTotalSale.value) * (parseFloat($('#CommissionRate_OsPercentage').val()) / 100);
+        //commissionSale.value = parseFloat(originCommissionSale) * parseFloat(1 - (parseFloat($('#CommissionRate_OsPercentage').val()) / 100));
+        //commissionPm.value = parseFloat(originCommissionPm) * parseFloat(1 - (parseFloat($('#CommissionRate_OsPercentage').val()) / 100));
+        //commissionSupport.value = parseFloat(originCommissionSupport) * parseFloat(1 - (parseFloat($('#CommissionRate_OsPercentage').val()) / 100));
+        //commissionInstall.value = parseFloat(originCommissionInstall) * parseFloat(1 - (parseFloat($('#CommissionRate_OsPercentage').val()) / 100));
+
+        //calculateCommissionTotalSale();
+        calculateCommissionVerify();
+
+        //} else {
+
+        //    commissionOs.value = 0;
+        //    commissionSale.value = originCommissionSale;
+        //    commissionPm.value = originCommissionPm;
+        //    commissionSupport.value = originCommissionSupport;
+        //    commissionInstall.value = originCommissionInstall;
+
+        //    calculateCommissionTotalSale();
+        //    calculateCommissionVerify();
+        //}
+
+        setDecimalFormat()
+    }
+
+    function calculateCommissionVerify() {
+        //var commissionTotalSale = document.getElementById("Commission_ConclusionCommission");
+        var commissionSale = document.getElementById("Commission_CommissionSales");
+        var commissionPm = document.getElementById("Commission_CommissionPM");
+        var commissionSupport = document.getElementById("Commission_CommissionApp");
+        var commissionInstall = document.getElementById("Commission_CommissionInstall");
+        var commissionAdmin = document.getElementById("Commission_CommissionAdmin");
+        var commissionOs = document.getElementById("Commission_CommissionOutside");
+        var commissionVerify = document.getElementById("Commission_AuditCommission");
+
+        if (isNaN(parseFloat(commissionOs.value))) {
+            commissionOs.value = 0;
+        }
+
+        //commissionVerify.value = parseFloat(commissionTotalSale.value) + parseFloat(commissionOs.value) + parseFloat(commissionAdmin.value);
+        commissionVerify.value = parseFloat(commissionSale.value)
+            + parseFloat(commissionPm.value)
+            + parseFloat(commissionSupport.value)
+            + parseFloat(commissionInstall.value)
+            + parseFloat(commissionAdmin.value)
+            + parseFloat(commissionOs.value);
+    }
+
+    function setDecimalFormat() {
+        $('#PricePerUnit').val(parseFloat($('#PricePerUnit').val()).toFixed(2));
+        $('#ActualPricePerUnit').val(parseFloat($('#ActualPricePerUnit').val()).toFixed(2));
+        $('#TotalPrice').val(parseFloat($('#TotalPrice').val()).toFixed(2));
+        $('#ActualTotalPrice').val(parseFloat($('#ActualTotalPrice').val()).toFixed(2));
+        $('#TotalCost').val(parseFloat($('#TotalCost').val()).toFixed(2));
+        $('#Profit').val(parseFloat($('#Profit').val()).toFixed(2));
+        $('#ProfitPercentage').val(parseFloat($('#ProfitPercentage').val()).toFixed(2));
+        $('#Commission_TotalCommission').val(parseFloat($('#Commission_TotalCommission').val()).toFixed(2));
+        $('#Commission_CommissionSales').val(parseFloat($('#Commission_CommissionSales').val()).toFixed(2));
+        $('#Commission_CommissionPM').val(parseFloat($('#Commission_CommissionPM').val()).toFixed(2));
+        $('#Commission_CommissionApp').val(parseFloat($('#Commission_CommissionApp').val()).toFixed(2));
+        $('#Commission_CommissionInstall').val(parseFloat($('#Commission_CommissionInstall').val()).toFixed(2));
+        $('#Commission_CommissionAdmin').val(parseFloat($('#Commission_CommissionAdmin').val()).toFixed(2));
+        $('#Commission_ConclusionCommission').val(parseFloat($('#Commission_ConclusionCommission').val()).toFixed(2));
+        $('#Commission_CommissionOutside').val(parseFloat($('#Commission_CommissionOutside').val()).toFixed(2));
+        $('#Commission_AuditCommission').val(parseFloat($('#Commission_AuditCommission').val()).toFixed(2));
+    }
+
+    // +++++++++++++++ Modal +++++++++++++++ //
+    var originalRateSales;
+    var originalRatePm;
+    var originalRateAppSupport;
+    var originalRateInstallDelivery;
+    var originalRateAdmin;
+    var originalRateOs;
+
+    function calculateTotalRate() {
+
+        // Set 2 decimal places
+        $('#CommissionRate_SalesPercentage').val(parseFloat($('#CommissionRate_SalesPercentage').val()).toFixed(2));
+        $('#CommissionRate_PmPercentage').val(parseFloat($('#CommissionRate_PmPercentage').val()).toFixed(2));
+        $('#CommissionRate_AppSupportPercentage').val(parseFloat($('#CommissionRate_AppSupportPercentage').val()).toFixed(2));
+        $('#CommissionRate_InstallDeliveryPercentage').val(parseFloat($('#CommissionRate_InstallDeliveryPercentage').val()).toFixed(2));
+        $('#CommissionRate_AdminPercentage').val(parseFloat($('#CommissionRate_AdminPercentage').val()).toFixed(2));
+        $('#CommissionRate_OsPercentage').val(parseFloat($('#CommissionRate_OsPercentage').val()).toFixed(2));
+
+        // Decalre variable
+        var rateSales = parseFloat($('#CommissionRate_SalesPercentage').val());
+        var ratePm = parseFloat($('#CommissionRate_PmPercentage').val());
+        var rateAppSuport = parseFloat($('#CommissionRate_AppSupportPercentage').val());
+        var rateInstallDelivery = parseFloat($('#CommissionRate_InstallDeliveryPercentage').val());
+        var rateAdmin = parseFloat($('#CommissionRate_AdminPercentage').val());
+        var rateOs = parseFloat($('#CommissionRate_OsPercentage').val());
+
+        // Check show hide dropdown
+        checkShowHideDropdown(rateSales, '#ddSales');
+        checkShowHideDropdown(ratePm, '#ddPm');
+        checkShowHideDropdown(rateAppSuport, '#ddAppSupport');
+        checkShowHideDropdown(rateInstallDelivery, '#ddInstallDelivery');
+        checkShowHideDropdown(rateAdmin, '#ddAdmin');
+        checkShowHideDropdown(rateOs, '#ddOs');
+        checkShowHideDropdownProfile();
+
+        // Calculate total
+        var total = rateSales + ratePm + rateAppSuport + rateInstallDelivery + rateAdmin;
+        $('#CommissionRate_TotalPercentage').val(total.toFixed(2));
+    }
+
+    function checkShowHideDropdownProfile() {
+
+        //// Sales
+        //var SalesProfileId1 = $('#SalesProfileId1');
+        //var SalesProfileId2 = $('#SalesProfileId2');
+        //var SalesProfileId3 = $('#SalesProfileId3');
+        //checkShowHideDropdown(SalesProfileId1.val(), SalesProfileId2);
+        //checkShowHideDropdown(SalesProfileId2.val(), SalesProfileId3);
+
+        //// Pm
+        //var PmProfileId1 = $('#PmProfileId1');
+        //var PmProfileId2 = $('#PmProfileId2');
+        //var PmProfileId3 = $('#PmProfileId3');
+        //checkShowHideDropdown(PmProfileId1.val(), PmProfileId2);
+        //checkShowHideDropdown(PmProfileId2.val(), PmProfileId3);
+
+        //// AppSupport
+        //var AppSupportProfileId1 = $('#AppSupportProfileId1');
+        //var AppSupportProfileId2 = $('#AppSupportProfileId2');
+        //var AppSupportProfileId3 = $('#AppSupportProfileId3');
+        //checkShowHideDropdown(AppSupportProfileId1.val(), AppSupportProfileId2);
+        //checkShowHideDropdown(AppSupportProfileId2.val(), AppSupportProfileId3);
+
+        //// InstallDelivery
+        //var InstallDeliveryProfileId1 = $('#InstallDeliveryProfileId1');
+        //var InstallDeliveryProfileId2 = $('#InstallDeliveryProfileId2');
+        //var InstallDeliveryProfileId3 = $('#InstallDeliveryProfileId3');
+        //checkShowHideDropdown(InstallDeliveryProfileId1.val(), InstallDeliveryProfileId2);
+        //checkShowHideDropdown(InstallDeliveryProfileId2.val(), InstallDeliveryProfileId3);
+
+        //// Admin
+        //var AdminProfileId1 = $('#AdminProfileId1');
+        //var AdminProfileId2 = $('#AdminProfileId2');
+        //var AdminProfileId3 = $('#AdminProfileId3');
+        //checkShowHideDropdown(AdminProfileId1.val(), AdminProfileId2);
+        //checkShowHideDropdown(AdminProfileId2.val(), AdminProfileId3);
+
+        //// Os
+        //var OsProfileId1 = $('#OsProfileId1');
+        //var OsProfileId2 = $('#OsProfileId2');
+        //var OsProfileId3 = $('#OsProfileId3');
+        //checkShowHideDropdown(OsProfileId1.val(), OsProfileId2);
+        //checkShowHideDropdown(OsProfileId2.val(), OsProfileId3);
+    }
+
+    function checkShowHideDropdown(value, id) {
+        if (value > 0) $(id).show();
+        else $(id).hide();
+    }
+
+    function backupOriginalRate() {
+        originalRateSales = parseFloat($('#CommissionRate_SalesPercentage').val());
+        originalRatePm = parseFloat($('#CommissionRate_PmPercentage').val());
+        originalRateAppSupport = parseFloat($('#CommissionRate_AppSupportPercentage').val());
+        originalRateInstallDelivery = parseFloat($('#CommissionRate_InstallDeliveryPercentage').val());
+        originalRateAdmin = parseFloat($('#CommissionRate_AdminPercentage').val());
+        originalRateOs = parseFloat($('#CommissionRate_OsPercentage').val());
+    }
+
+    function resetChangeRate() {
+        $('#CommissionRate_SalesPercentage').val(originalRateSales);
+        $('#CommissionRate_PmPercentage').val(originalRatePm);
+        $('#CommissionRate_AppSupportPercentage').val(originalRateAppSupport);
+        $('#CommissionRate_InstallDeliveryPercentage').val(originalRateInstallDelivery);
+        $('#CommissionRate_AdminPercentage').val(originalRateAdmin);
+        $('#CommissionRate_OsPercentage').val(originalRateOs);
+
+        calculateTotalRate();
+    }
+
+    function validateRate() {
+
+        if (parseFloat($('#CommissionRate_TotalPercentage').val()) != 100) {
+            bootbox.alert('Total must equals 100.00');
+        } else if (parseFloat($('#CommissionRate_OsPercentage').val()) > 100) {
+            bootbox.alert('Outsite Lead Rate cannot over than 100%');
+        } else if (parseFloat($('#CommissionRate_SalesPercentage').val()) > 0
+            && $('#SalesProfileId1').val() <= 0
+            && $('#SalesProfileId2').val() <= 0
+            && $('#SalesProfileId3').val() <= 0) {
+            bootbox.alert('Please select person in charge of Sales ');
+        } else if (parseFloat($('#CommissionRate_PmPercentage').val()) > 0
+            && $('#PmProfileId1').val() <= 0
+            && $('#PmProfileId2').val() <= 0
+            && $('#PmProfileId3').val() <= 0) {
+            bootbox.alert('Please select person in charge of Product Manager');
+        } else if (parseFloat($('#CommissionRate_AppSupportPercentage').val()) > 0
+            && $('#AppSupportProfileId1').val() <= 0
+            && $('#AppSupportProfileId2').val() <= 0
+            && $('#AppSupportProfileId3').val() <= 0) {
+            bootbox.alert('Please select person in charge of Application/Support');
+        } else if (parseFloat($('#CommissionRate_InstallDeliveryPercentage').val()) > 0
+            && $('#InstallDeliveryProfileId1').val() <= 0
+            && $('#InstallDeliveryProfileId2').val() <= 0
+            && $('#InstallDeliveryProfileId3').val() <= 0) {
+            bootbox.alert('Please select person in charge of Installation/Delivery');
+        } else if (parseFloat($('#CommissionRate_AdminPercentage').val()) > 0
+            && $('#AdminProfileId1').val() <= 0
+            && $('#AdminProfileId2').val() <= 0
+            && $('#AdminProfileId3').val() <= 0) {
+            bootbox.alert('Please select person in charge of Admin ');
+        } else if (parseFloat($('#CommissionRate_OsPercentage').val()) > 0
+            && $('#OsProfileId1').val() <= 0
+            && $('#OsProfileId2').val() <= 0
+            && $('#OsProfileId3').val() <= 0) {
+            bootbox.alert('Please select person in charge of Outsite Lead');
+        } else {
+            return true;
+        }
+        return false;
+    }
+
+    function saveRate() {
+
+        if (validateRate()) {
+            $('#CommissionRate').modal('hide');
+            calculateTotalCommission();
+        }
+    }
+
+    function printModal(data) {
+        var mywindow = window.open('', 'my div', 'height=400,width=600');
+        mywindow.document.write('<html><head><title>my div</title>');
+        /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+        mywindow.document.write('</head><body >');
+        mywindow.document.write($(data).html());
+        mywindow.document.write('</body></html>');
+
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10
+
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    }
+
+</script>

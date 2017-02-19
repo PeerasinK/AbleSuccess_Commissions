@@ -1,0 +1,68 @@
+﻿@using AbleSuccess.Commissions.WebUi.Common;
+@{
+    ViewBag.Title = "Able Success Co. Ltd . - Commission System";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a href='@Url.Action("Index")'>
+                    <img style="float:left; margin:8px 20px 0px 15px;" src='@Url.Content("../../Contents/Images/Logo-Able.png")' width="40" alt="Able Success">
+                    @Html.ActionLink("Able Success Co., Ltd.", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", @style = "color:white" })
+                </a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @{
+                        if (Helper.UserRole == "0")
+                        {
+                            <li> @Html.ActionLink("User Management", "Index", "User") </li>
+                            @*<li> @Html.ActionLink("Report Management", "Index", "Report") </li>*@
+                        }
+                        else if (Helper.UserRole == "1")
+                        {
+                            <li>@Html.ActionLink("Employee List", "Index", "Employee")</li>
+                            <li>@Html.ActionLink("PO List", "Index", "Po")</li>
+                            <li>@Html.ActionLink("Commission List", "Index", "Commission")</li>
+                            <li>@Html.ActionLink("Commission Rate", "Rate", "Commission")</li>
+                            @*<li>@Html.ActionLink("Report", "Index", "Report")</li>*@
+                        }
+                        else if (Helper.UserRole == "2")
+                        {
+                            <li>@Html.ActionLink("Profile", "Detail", "Employee")</li>
+                            <li>@*@Html.ActionLink("My Commission", "Index", "Commission")*@</li>
+                            <li>@Html.ActionLink("PO List", "Index", "Po")</li>
+                            <li>@Html.ActionLink("New PO", "Detail", "Po")</li>
+                        }
+                    }
+                </ul>
+                <div class="col-sm-2 col-md-2 pull-right">
+                    <div class="navbar-text">
+                        @Helper.Username, @Html.ActionLink("Logout", "Logout", "Login")
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        @Html.Partial("~/Views/Shared/Footer.cshtml")
+    </div>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
