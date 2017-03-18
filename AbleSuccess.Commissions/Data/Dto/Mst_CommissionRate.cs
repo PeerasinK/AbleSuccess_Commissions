@@ -22,5 +22,8 @@ namespace AbleSuccess.Commissions.Data
         [Column(Order = 3)]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int PercentageOf { get; set; }
+
+        [Column(Order = 4)]
+        public int Year { get; set; }
     }
 }
