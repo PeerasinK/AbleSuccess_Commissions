@@ -1,4 +1,5 @@
-﻿using AbleSuccess.Commissions.WebUi.Models;
+﻿using AbleSuccess.Commissions.WebUi.Manager;
+using AbleSuccess.Commissions.WebUi.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -92,6 +93,8 @@ namespace AbleSuccess.Commissions.WebUi.Common
         public static List<LookupModel> LookupReportSubType { get { return GetXmlLookupConfig("ReportSubType"); } }
 
         public static List<LookupModel> LookupQuarter { get { return GetXmlLookupConfig("Quarter"); } }
+
+        public static List<LookupModel> LookupCommissionRateYear { get { return new CommissionManager().GetCommissionRateYear(); } }
 
         #endregion
 

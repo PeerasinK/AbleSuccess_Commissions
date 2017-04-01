@@ -240,6 +240,7 @@
     </Content>
     <None Include="Properties\PublishProfiles\AS.pubxml" />
     <Content Include="Reports\ReportCommission.frx" />
+    <None Include="Properties\PublishProfiles\AS_Commissions.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -285,6 +286,7 @@
     <Content Include="Views\Commission\List.cshtml" />
     <Content Include="Views\Error\_404.cshtml" />
     <Content Include="Views\Error\_000.cshtml" />
+    <Content Include="Views\Commission\RateDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

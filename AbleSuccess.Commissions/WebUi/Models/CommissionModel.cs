@@ -1,4 +1,5 @@
 ﻿
+using AbleSuccess.Commissions.WebUi.Common;
 using System;
 using System.Collections.Generic;
 
@@ -108,6 +109,8 @@ namespace AbleSuccess.Commissions.WebUi.Models
         public int PercentageOf { get; set; }
 
         public string PercentageOfDesciption { get; set; }
+
+        public int Year { get; set; }
     }
 
     public class CommissionRateViewModel : BaseModel
@@ -115,6 +118,8 @@ namespace AbleSuccess.Commissions.WebUi.Models
         public List<CommissionRateModel> CommissionRateCollection { get; set; }
 
         public List<LookupModel> LookupCommissionPercentageOf { get; set; }
+
+        public List<LookupModel> LookupCommissionRateYear { get { return Helper.LookupCommissionRateYear; } }
 
         public decimal SalesPercentage { get; set; }
 

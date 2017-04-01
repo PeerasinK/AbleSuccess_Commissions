@@ -180,7 +180,8 @@ namespace AbleSuccess.Commissions.WebUi.Manager
                 RateId = o.RateId,
                 PositionId = o.PositionId,
                 Percentage = o.Percentage,
-                PercentageOf = o.PercentageOf
+                PercentageOf = o.PercentageOf,
+                Year = o.Year
             }).OrderBy(o => o.PositionId).ToList();
 
             // Set Lookup
@@ -231,6 +232,19 @@ namespace AbleSuccess.Commissions.WebUi.Manager
             }
 
             _unitOfWork.Execute();
+        }
+
+        public List<LookupModel> GetCommissionRateYear()
+        {
+            // Get data
+            var query = _unitOfWork.GetRepository<Mst_CommissionRate>().GetQueryable();
+
+            // Return year
+            return query.Select(o => new LookupModel()
+            {
+                Key = o.Year.ToString(),
+                Value = o.Year.ToString()
+            }).Distinct().OrderBy(o => o.Key).ToList();
         }
 
         #endregion
