@@ -123,7 +123,16 @@
     init();
 
     function printPage() {
-        window.print();
+        if ($("#showReport").val() == 1) {
+            if ($("#Year").val() != null) {
+                var sale;
+                if ($("#userRole").val() != "1") sale = $("#profileId").val();
+                else sale = $("#SelectedSalesProfileId").val();
+                condition = "?type=" + $('input[name="ReportType"]:checked').val() + "&subType=" + $('input[name="ReportSubType"]:checked').val() + "&year=" + $("#Year").val() + "&salesProfileId=" + sale;
+                var url = '@Url.Action("PrintReport", "Home")';
+                window.location = url + condition;
+            }
+        }
     }
 
     function init() {

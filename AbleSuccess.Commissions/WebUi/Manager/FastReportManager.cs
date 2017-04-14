@@ -59,5 +59,33 @@ namespace AbleSuccess.Commissions.WebUi.Manager
             List<CommissionMasterReportModel> commissionMasterReports = MapperCommission(commissionCollectionViewModel);
             return FastReportHelper.ShowData(reportname, commissionMasterReports);
         }
+
+        public MemoryStream GenPDFFile(string reportname, DashBoardMasterReportModel dashBoardMasterReportModel)
+        {
+            List<DashBoardMasterReportModel> dashBoardMasterReportModels = MapperDashBoard(dashBoardMasterReportModel);
+            return FastReportHelper.ShowData(reportname, dashBoardMasterReportModels);
+        }
+
+        public List<DashBoardMasterReportModel> MapperDashBoard(DashBoardMasterReportModel dashBoardMasterReportModel)
+        {
+            EmployeeDetailViewModel employeeDetailViewModel = _employeeManager.GetEmployeeDetail(Convert.ToInt32(dashBoardMasterReportModel.Name));
+            dashBoardMasterReportModel.Name = employeeDetailViewModel.FirstName + " " + employeeDetailViewModel.LastName;
+            if (dashBoardMasterReportModel.Year == ""|| dashBoardMasterReportModel.Year== null)
+            {
+                dashBoardMasterReportModel.TitleReport = "No data";
+            }
+            else
+            {
+                if (dashBoardMasterReportModel.ReportType == "0") dashBoardMasterReportModel.ReportType = "Revenue";
+                else if (dashBoardMasterReportModel.ReportType == "1") dashBoardMasterReportModel.ReportType = "Profit";
+                if (dashBoardMasterReportModel.ReportSubType == "0") dashBoardMasterReportModel.ReportSubType = "Monthly";
+                else if (dashBoardMasterReportModel.ReportSubType == "1") dashBoardMasterReportModel.ReportSubType = "Quarter";
+                dashBoardMasterReportModel.TitleReport += dashBoardMasterReportModel.ReportType + " Year " + dashBoardMasterReportModel.Year;
+            }
+            List<DashBoardMasterReportModel> dashBoardMasterReportModels = new List<DashBoardMasterReportModel>();
+            dashBoardMasterReportModels.Add(dashBoardMasterReportModel);
+            return dashBoardMasterReportModels;
+        }
+
     }
 }
