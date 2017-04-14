@@ -31,12 +31,17 @@ namespace AbleSuccess.Commissions.WebUi.Manager
             string hashedPassword = Helper.GetHash(password);
             Mst_Credential credential = _unitOfWork.GetRepository<Mst_Credential>()
                 .GetQueryable().FirstOrDefault(o => o.Username == username && o.Password == hashedPassword && o.Status == 1);
+
+            // Get profileId
+            Mst_Profile profile = _unitOfWork.GetRepository<Mst_Profile>().GetQueryable().FirstOrDefault(o => o.UserId == credential.UserId);
+
             return credential == null ? null : new LoginModel
             {
                 UserId = credential.UserId,
                 Username = credential.Username,
                 Role = credential.Role,
                 Password = credential.Password,
+                ProfileId = profile != null ? profile.ProfileId : 0
             };
         }
 

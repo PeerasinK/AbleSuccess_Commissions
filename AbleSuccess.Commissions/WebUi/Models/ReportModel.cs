@@ -17,6 +17,10 @@ namespace AbleSuccess.Commissions.WebUi.Models
 
         public int Quarter { get; set; }
 
+        public bool IsSales { get; set; }
+
+        public List<LookupModel> LookupSales { get; set; }
+
         public List<LookupModel> LookupYear { get; set; }
 
         public List<LookupModel> LookupQuarter { get; set; }
