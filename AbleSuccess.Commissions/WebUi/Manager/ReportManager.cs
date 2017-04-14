@@ -26,6 +26,20 @@ namespace AbleSuccess.Commissions.WebUi.Manager
 
         #region [PUBLIC METHODS]
 
+        public List<LookupModel> GetLookupSales()
+        {
+            List<LookupModel> lookup = (from po in _unitOfWork.GetRepository<Txn_PO>().GetQueryable(o => o.Status == 1)
+                                        join profile in _unitOfWork.GetRepository<Mst_Profile>().GetQueryable(o => o.Status == 1)
+                                        on po.SalesProfileId equals profile.ProfileId
+                                        select new LookupModel
+                                        {
+                                            Key = po.SalesProfileId.ToString(),
+                                            Value = profile.FirstName + " " + profile.LastName
+                                        }).Distinct().ToList();
+
+            return lookup;
+        }
+
         public List<LookupModel> GetLookupYear()
         {
             List<DateTime> poDateList = _unitOfWork.GetRepository<Txn_PO>().GetQueryable(o => o.Status == 1).OrderByDescending(o => o.PoDate).Select(o => o.PoDate).ToList();
@@ -41,14 +55,15 @@ namespace AbleSuccess.Commissions.WebUi.Manager
             return lookup;
         }
 
-        public List<ChartData> YearlyReport(int type, int subType, int year)
+        public List<ChartData> YearlyReport(int type, int subType, int year, int salesProfileId)
         {
             DateTime dateFrom = new DateTime(year, 1, 1);
             DateTime dateTo = new DateTime(year, 12, 31);
 
             // Get data
             List<PoDetailModel> poList = (from pd in _unitOfWork.GetRepository<Txn_PODetail>().GetQueryable(o => o.Status == 1)
-                                          join p in _unitOfWork.GetRepository<Txn_PO>().GetQueryable(o => o.Status == 1 && dateFrom <= o.PoDate && o.PoDate <= dateTo)
+                                          join p in _unitOfWork.GetRepository<Txn_PO>().GetQueryable(
+                                              o => o.Status == 1 && o.SalesProfileId == salesProfileId && dateFrom <= o.PoDate && o.PoDate <= dateTo)
                                           on pd.PoId equals p.PoId
 
                                           select new PoDetailModel

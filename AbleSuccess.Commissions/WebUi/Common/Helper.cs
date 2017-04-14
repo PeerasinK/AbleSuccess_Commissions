@@ -56,6 +56,18 @@ namespace AbleSuccess.Commissions.WebUi.Common
             }
         }
 
+        public static string ProfileId
+        {
+            get
+            {
+                return (string)HttpContext.Current.Session["_ProfileId"];
+            }
+            set
+            {
+                HttpContext.Current.Session["_ProfileId"] = value;
+            }
+        }
+
         public static decimal CommissionPayRate { get { return Decimal.Parse(ConfigurationManager.AppSettings["CommissionPayRate"]); } }
 
         public static decimal CommissionForSale { get { return Decimal.Parse(ConfigurationManager.AppSettings["CommissionForSale"]); } }

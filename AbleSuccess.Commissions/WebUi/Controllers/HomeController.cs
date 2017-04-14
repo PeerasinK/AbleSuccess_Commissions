@@ -14,21 +14,24 @@ namespace AbleSuccess.Commissions.WebUi.Controllers
         public ActionResult Index()
         {
             ReportManager manager = new ReportManager();
+            List<LookupModel> lookupSales = manager.GetLookupSales();
             ReportViewModel model = new ReportViewModel
             {
                 LookupQuarter = Helper.LookupQuarter,
-                LookupYear =  manager.GetLookupYear(),
+                LookupYear = manager.GetLookupYear(),
+                LookupSales = lookupSales,
                 Quarter = 1,
                 Year = DateTime.UtcNow.Year,
+                IsSales = lookupSales.Exists(x => x.Key == Helper.ProfileId),
             };
 
             return View(model);
         }
 
-        public ActionResult Report(int type, int subType, int year)
+        public ActionResult Report(int type, int subType, int year, int salesProfileId)
         {
             ReportManager manager = new ReportManager();
-            List<ChartData> dataList = manager.YearlyReport(type, subType, year);
+            List<ChartData> dataList = manager.YearlyReport(type, subType, year, salesProfileId);
 
             return Json(new { data = dataList });
         }

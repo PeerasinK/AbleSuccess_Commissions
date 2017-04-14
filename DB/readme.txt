@@ -1,0 +1,2 @@
+- run script 1003 + 1004
+- don't forget to add old saledProfileId @Txn_PO

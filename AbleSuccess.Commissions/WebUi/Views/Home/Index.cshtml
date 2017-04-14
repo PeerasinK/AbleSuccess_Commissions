@@ -3,11 +3,12 @@
 
 @{
     ViewBag.Header = "Dashboard";
+    ViewBag.ShowReport = Helper.UserRole != "0" && (Helper.UserRole == "1" || Model.IsSales) ? 1 : 0;
 }
 @Scripts.Render("~/bundles/jquery")
 @Styles.Render("~/Content/css")
 <div class="col-xs-12 menu-header">
-    @if (Helper.UserRole != "0")
+    @if (ViewBag.ShowReport == 1)
     {
         @ViewBag.Header
     }
@@ -16,15 +17,36 @@
     <div class="row header-row">
         <div class="col-md-12">
             <div class="col-md-10">
+                <input id="userRole" type="hidden" value="@Helper.UserRole" />
+                <input id="profileId" type="hidden" value="@Helper.ProfileId" />
+                <input id="showReport" type="hidden" value="@ViewBag.ShowReport" />
                 <div id="chartContainer" style="height: 450px; width: 100%;">
-                    <input id="userRole" type="hidden" value="@Helper.UserRole" />
+                    
                 </div>
             </div>
-            @if (Helper.UserRole != "0")
+            @if (ViewBag.ShowReport== 1)
             {
                 <div class="col-md-2">
                     <br />
                     <table>
+                        @*Sales*@
+                        @if (Helper.UserRole == "1") { 
+                        <tr>
+                            <td colspan="2">
+                                <h4><strong>Sales</strong></h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                @Html.DropDownList("SelectedSalesProfileId", new SelectList(@Model.LookupSales, "Key", "Value"), new { @class = "form-control" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                &nbsp;
+                            </td>
+                        </tr>
+                        }
                         @*Report Type*@
                         <tr>
                             <td colspan="2">
@@ -125,15 +147,25 @@
     }
 
     function renderChart() {
-        if ($("#userRole").val() != 0) {
+        if ($("#showReport").val() == 1) {
             if ($("#Year").val() != null) {
+
+                var sale;
+                if ($("#userRole").val() != "1") sale = $("#profileId").val();
+                else sale = $("#SelectedSalesProfileId").val();
+
                 $.ajax({
                     type: "POST",
                     traditional: true,
                     async: true,
                     cache: false,
                     url: '@Url.Action("Report", "Home")',
-                    data: { type: $('input[name="ReportType"]:checked').val(), subType: $('input[name="ReportSubType"]:checked').val(), year: $("#Year").val() },
+                    data: {
+                        type: $('input[name="ReportType"]:checked').val(),
+                        subType: $('input[name="ReportSubType"]:checked').val(),
+                        year: $("#Year").val(),
+                        salesProfileId: sale
+                    },
                     success: function (result) {
 
                         var chart = new CanvasJS.Chart("chartContainer",

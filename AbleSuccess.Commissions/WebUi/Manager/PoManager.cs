@@ -409,7 +409,8 @@ namespace AbleSuccess.Commissions.WebUi.Manager
                 PoFilePath = model.PoFilePath,
                 InvoiceFilePath = model.InvoiceFilePath,
                 CustomerName = model.CustomerName,
-                Status = model.Status
+                Status = model.Status,
+                SalesProfileId = model.SalesProfileId1
             };
         }
 
