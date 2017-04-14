@@ -30,5 +30,8 @@ namespace AbleSuccess.Commissions.Data
 
         [Column(Order = 4)]
         public int Status { get; set; }
+
+        [Column(Order = 5)]
+        public int? SalesProfileId { get; set; }
     }
 }

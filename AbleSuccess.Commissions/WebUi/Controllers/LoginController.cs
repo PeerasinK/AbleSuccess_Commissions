@@ -27,6 +27,7 @@ namespace AbleSuccess.Commissions.WebUi.Controllers
             Helper.Username = model.Username;
             Helper.UserId = model.UserId.ToString();
             Helper.UserRole = model.Role.ToString();
+            Helper.ProfileId = model.ProfileId.ToString();
 
             return RedirectToAction("Index", "Home");
         }
