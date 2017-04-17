@@ -49,7 +49,6 @@ namespace FastReport
         <MSChartSeries Name="Series1" XValue="[ReportCommission.ChartDataModels.label]" YValue1="[ReportCommission.ChartDataModels.y]"/>
       </MSChartObject>
       <RichObject Name="Rich1" Top="47.25" Width="718.2" Height="28.35" Text="{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil Arial;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.14393}\viewkind4\uc1 &#13;&#10;\pard\qc\b\f0\fs28 [ReportCommission.TitleReport]\b0\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
-      <TextObject Name="Text1" Width="718.2" Height="28.35" Text="Dashboard" HorzAlign="Center" Font="Arial, 18pt, style=Bold"/>
     </ReportSummaryBand>
   </ReportPage>
 </Report>
