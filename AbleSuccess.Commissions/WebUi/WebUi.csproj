@@ -178,6 +178,7 @@
     <Compile Include="Manager\LoginManager.cs" />
     <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\CommissionMasterReportModel.cs" />
+    <Compile Include="Models\DashBoardMasterReportModel.cs" />
     <Compile Include="Models\PoModel.cs" />
     <Compile Include="Models\CommissionModel.cs" />
     <Compile Include="Models\EmployeeModel.cs" />
