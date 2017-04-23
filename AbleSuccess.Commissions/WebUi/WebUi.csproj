@@ -288,6 +288,7 @@
     <Content Include="Views\Error\_404.cshtml" />
     <Content Include="Views\Error\_000.cshtml" />
     <Content Include="Views\Commission\RateDetail.cshtml" />
+    <Content Include="Views\Commission\RateNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

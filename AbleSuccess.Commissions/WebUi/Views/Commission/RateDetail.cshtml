@@ -1,55 +1,49 @@
 ﻿@using AbleSuccess.Commissions.WebUi.Models;
-@model CommissionRateViewModel
-
-@{
-    ViewBag.Header = "Commission Rate";
-}
+@model CommissionRateDetailViewModel
 
 @Scripts.Render("~/bundles/jquery")
 @Styles.Render("~/Content/css")
 
-<div class="col-xs-12 menu-header">
-    @ViewBag.Header
-</div>
 
 <div class="container">
-    <div class="col-md-offset-2 col-md-8 well">
-        <table class="col-sm-12">
-            <tr>
-                <td class="col-sm-4 text-center">
-                    <h3>&nbsp;</h3>
-                </td>
-                <td class="col-sm-3 text-center">
-                    <h3>Rate (%)</h3>
-                </td>
-                <td class="col-sm-4 text-center">
-                    <h3>% Of</h3>
-                </td>
-                <td class="col-sm-1 text-center">
-                    &nbsp;
-                </td>
-            </tr>
-
-
-
-            @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "CommissionRateForm" }))
+    <div class="col-sm-12">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "CommissionRateDetailForm" }))
             {
+            <table class="col-sm-12">
+                <tr>
+                    <td class="col-sm-4 text-center">
+                        <h3>&nbsp;</h3>
+                    </td>
+                    <td class="col-sm-6 text-right">
+                        <h3>Rate (%)</h3>
+                    </td>
+                    <td class="col-sm-1 text-center">
+                        @*<h3>% Of</h3>*@
+                    </td>
+                    <td class="col-sm-1 text-center">
+                        &nbsp;
+                    </td>
+                </tr>
+
+
+                @Html.HiddenFor(model => model.Year)
+
                 @*foreach (CommissionRateModel commission in Model.CommissionRateCollection)
-                {
-                    <tr>
-                        <td class="col-sm-4" align="right">
-                            <strong>@commission.PositionName : </strong>
-                        </td>
-                        <td class="col-sm-3 text-center">
-                            @Html.TextBoxFor(model => commission.Percentage, new { @class = "form-control", @style = "text-align:right;", onblur = "calculateTotal()" })
-                        </td>
-                        <td class="col-sm-4 text-center">
-                            @Model.CommissionRateCollection[5].PercentageOf
-                            @commission.PercentageOf
-                            @Html.DropDownListFor(model => commission.PercentageOf, new SelectList(@Model.LookupCommissionPercentageOf, "Key", "Value"), new { @class = "form-control" })
-                        </td>
-                    </tr>
-                }*@
+                    {
+                        <tr>
+                            <td class="col-sm-4" align="right">
+                                <strong>@commission.PositionName : </strong>
+                            </td>
+                            <td class="col-sm-3 text-center">
+                                @Html.TextBoxFor(model => commission.Percentage, new { @class = "form-control", @style = "text-align:right;", onblur = "calculateTotal()" })
+                            </td>
+                            <td class="col-sm-4 text-center">
+                                @Model.CommissionRateCollection[5].PercentageOf
+                                @commission.PercentageOf
+                                @Html.DropDownListFor(model => commission.PercentageOf, new SelectList(@Model.LookupCommissionPercentageOf, "Key", "Value"), new { @class = "form-control" })
+                            </td>
+                        </tr>
+                    }*@
                 <tr>
                     <td class="col-sm-4" align="right">
                         <strong>Sales : </strong>
@@ -58,7 +52,7 @@
                         @Html.TextBoxFor(model => model.SalesPercentage, new { @class = "form-control", @style = "text-align:right;", onblur = "calculateTotal()" })
                     </td>
                     <td class="col-sm-4 text-center">
-                        @Html.DropDownListFor(model => model.SalesPercentageOf, new SelectList(@Model.LookupCommissionPercentageOf, "Key", "Value"), new { @class = "form-control" })
+                        @*@Html.DropDownListFor(model => model.SalesPercentageOf, new SelectList(@Model.LookupCommissionPercentageOf, "Key", "Value"), new { @class = "form-control" })*@
                     </td>
                     <td class="col-sm-1 text-center">
                         &nbsp;
@@ -72,7 +66,7 @@
                         @Html.TextBoxFor(model => model.PmPercentage, new { @class = "form-control", @style = "text-align:right;", onblur = "calculateTotal()" })
                     </td>
                     <td class="col-sm-4 text-center">
-                        @Html.DropDownListFor(model => model.PmPercentageOf, new SelectList(@Model.LookupCommissionPercentageOf, "Key", "Value"), new { @class = "form-control" })
+                        @*@Html.DropDownListFor(model => model.PmPercentageOf, new SelectList(@Model.LookupCommissionPercentageOf, "Key", "Value"), new { @class = "form-control" })*@
                     </td>
                     <td class="col-sm-1 text-center">
                         &nbsp;
@@ -86,7 +80,7 @@
                         @Html.TextBoxFor(model => model.AppSupportPercentage, new { @class = "form-control", @style = "text-align:right;", onblur = "calculateTotal()" })
                     </td>
                     <td class="col-sm-4 text-center">
-                        @Html.DropDownListFor(model => model.AppSupportPercentageOf, new SelectList(@Model.LookupCommissionPercentageOf, "Key", "Value"), new { @class = "form-control" })
+                        @*@Html.DropDownListFor(model => model.AppSupportPercentageOf, new SelectList(@Model.LookupCommissionPercentageOf, "Key", "Value"), new { @class = "form-control" })*@
                     </td>
                     <td class="col-sm-1 text-center">
                         &nbsp;
@@ -100,7 +94,7 @@
                         @Html.TextBoxFor(model => model.InstallDeliveryPercentage, new { @class = "form-control", @style = "text-align:right;", onblur = "calculateTotal()" })
                     </td>
                     <td class="col-sm-4 text-center">
-                        @Html.DropDownListFor(model => model.InstallDeliveryPercentageOf, new SelectList(@Model.LookupCommissionPercentageOf, "Key", "Value"), new { @class = "form-control" })
+                        @*@Html.DropDownListFor(model => model.InstallDeliveryPercentageOf, new SelectList(@Model.LookupCommissionPercentageOf, "Key", "Value"), new { @class = "form-control" })*@
                     </td>
                     <td class="col-sm-1 text-center">
                         &nbsp;
@@ -114,13 +108,13 @@
                         @Html.TextBoxFor(model => model.AdminPercentage, new { @class = "form-control", @style = "text-align:right;", onblur = "calculateTotal()" })
                     </td>
                     <td class="col-sm-4 text-center">
-                        @Html.DropDownListFor(model => model.AdminPercentageOf, new SelectList(@Model.LookupCommissionPercentageOf, "Key", "Value"), new { @class = "form-control" })
+                        @*@Html.DropDownListFor(model => model.AdminPercentageOf, new SelectList(@Model.LookupCommissionPercentageOf, "Key", "Value"), new { @class = "form-control" })*@
                     </td>
                     <td class="col-sm-1 text-center">
                         &nbsp;
                     </td>
                 </tr>
-                
+
                 <tr>
                     <td>
                         &nbsp;
@@ -133,18 +127,22 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="right">
+                    <td class="col-sm-4" align="right">
                         <strong>Total : </strong>
                     </td>
-                    <td class="text-center">
+                    <td class="col-sm-3 text-center">
                         <input id="TotalPercentage" type="text" class="list-header-right form-control" style="text-align:right;" disabled />
                     </td>
-                    <td class="text-center" style="color:red;">
+                    <td class="col-sm-4 text-center" style="color:red;">
                         <!--* Sum all Rate except Outsite Lead-->
                     </td>
+                    <td class="col-sm-1 text-center">
+                        &nbsp;
+                    </td>
                 </tr>
-            }
-        </table>
+
+            </table>
+        }
         <br><br>
         <div class="col-xs-12 text-center">
             <div class="col-xs-12 col-sm-6">
@@ -188,7 +186,7 @@
     }
 
     function resetRate() {
-        document.getElementById("CommissionRateForm").reset();
+        document.getElementById("CommissionRateDetailForm").reset();
         calculateTotal();
     }
 
@@ -204,7 +202,7 @@
                         async: true,
                         cache: false,
                         url: '@Url.Action("EditRate", "Commission")',
-                        data: $('#CommissionRateForm').serialize(),
+                        data: $('#CommissionRateDetailForm').serialize(),
                         success: function (response) {
                             if (response.Result) {
                                 bootbox.alert("Save successful");

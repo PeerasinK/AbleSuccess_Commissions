@@ -63,14 +63,42 @@ namespace AbleSuccess.Commissions.WebUi.Controllers
 
         public ActionResult Rate()
         {
-            CommissionManager manager = new CommissionManager();
-            CommissionRateViewModel model = manager.GetCommissionRate();
+            return View(new CommissionRateViewModel { SearchYear = DateTime.Now.Year.ToString() });
+        }
 
-            return View(model);
+        public ActionResult RateNew()
+        {
+            return View(new CommissionRateDetailViewModel());
+        }
+
+        public ActionResult RateDetail(int year)
+        {
+            if (year == 0) year = DateTime.Now.Year;
+
+            CommissionManager manager = new CommissionManager();
+            CommissionRateDetailViewModel model = manager.GetCommissionRateDetail(year);
+
+            return PartialView("RateDetail", model);
         }
 
         [HttpPost]
-        public ActionResult EditRate(CommissionRateViewModel model)
+        public ActionResult NewRate(CommissionRateDetailViewModel model)
+        {
+            try
+            {
+                CommissionManager manager = new CommissionManager();
+                manager.CreateCommissionRate(model);
+            }
+            catch (Exception e)
+            {
+                return Json(new { Result = false, Message = e.Message });
+            }
+
+            return Json(new { Result = true });
+        }
+
+        [HttpPost]
+        public ActionResult EditRate(CommissionRateDetailViewModel model)
         {
             try
             {

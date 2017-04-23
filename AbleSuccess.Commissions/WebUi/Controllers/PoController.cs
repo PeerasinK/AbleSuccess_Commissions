@@ -74,7 +74,7 @@ namespace AbleSuccess.Commissions.WebUi.Controllers
                 model = manager.MappingCommissionDetail(model);
                 model.IsOwner = true;
                 model.PoDate = DateTime.UtcNow;
-                model.CommissionRate = comManager.GetCommissionRate(false);
+                model.CommissionRate = comManager.GetCommissionRateDetail(DateTime.Now.Year, false);
             }
 
             // Set config

@@ -115,11 +115,18 @@ namespace AbleSuccess.Commissions.WebUi.Models
 
     public class CommissionRateViewModel : BaseModel
     {
+        public List<LookupModel> LookupCommissionRateYear { get { return Helper.LookupCommissionRateYear; } }
+
+        public string SearchYear { get; set; }
+    }
+
+    public class CommissionRateDetailViewModel : BaseModel
+    {
         public List<CommissionRateModel> CommissionRateCollection { get; set; }
 
         public List<LookupModel> LookupCommissionPercentageOf { get; set; }
 
-        public List<LookupModel> LookupCommissionRateYear { get { return Helper.LookupCommissionRateYear; } }
+        public int Year { get; set; }
 
         public decimal SalesPercentage { get; set; }
 

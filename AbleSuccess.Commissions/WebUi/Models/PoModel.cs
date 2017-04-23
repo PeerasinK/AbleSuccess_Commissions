@@ -108,7 +108,7 @@ namespace AbleSuccess.Commissions.WebUi.Models
 
         public CommissionModel Commission { get; set; }
 
-        public CommissionRateViewModel CommissionRate { get; set; }
+        public CommissionRateDetailViewModel CommissionRate { get; set; }
 
         public int SalesProfileId1 { get; set; }
 

@@ -799,7 +799,7 @@ namespace AbleSuccess.Commissions.WebUi.Manager
             }
 
             // Add commission rate
-            model.CommissionRate = new CommissionRateViewModel();
+            model.CommissionRate = new CommissionRateDetailViewModel();
             model.CommissionRate.SalesPercentage = rateSales;
             model.CommissionRate.PmPercentage = ratePm;
             model.CommissionRate.AppSupportPercentage = rateAppSupport;

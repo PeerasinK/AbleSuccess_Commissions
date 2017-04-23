@@ -108,9 +108,11 @@ namespace AbleSuccess.Commissions.WebUi.Manager
             // Get Commission Detail for find the sale
             var listCommissionDetail = (from cd in _unitOfWork.GetRepository<Txn_CommissionDetail>().GetQueryable(o => o.Position == 1)
                                         join p in _unitOfWork.GetRepository<Mst_Profile>().GetQueryable() on cd.ProfileId equals p.ProfileId
-                                        select new 
+                                        select new
                                         {
-                                            cd.PoDetailId, p.FirstName, p.LastName
+                                            cd.PoDetailId,
+                                            p.FirstName,
+                                            p.LastName
                                         }).ToList();
 
             // Calculate tax and sum tootal
@@ -167,12 +169,12 @@ namespace AbleSuccess.Commissions.WebUi.Manager
             return model;
         }
 
-        public CommissionRateViewModel GetCommissionRate(bool isRateview = true)
+        public CommissionRateDetailViewModel GetCommissionRateDetail(int year, bool isRateview = true)
         {
-            CommissionRateViewModel model = new CommissionRateViewModel();
+            CommissionRateDetailViewModel model = new CommissionRateDetailViewModel { Year = year };
 
             // Get data
-            var query = _unitOfWork.GetRepository<Mst_CommissionRate>().GetQueryable();
+            var query = _unitOfWork.GetRepository<Mst_CommissionRate>().GetQueryable(o => o.Year == year);
 
             // Mapping dto with model
             model.CommissionRateCollection = query.Select(o => new CommissionRateModel()
@@ -221,11 +223,57 @@ namespace AbleSuccess.Commissions.WebUi.Manager
             return model;
         }
 
-        public void UpdateCommissionRate(CommissionRateViewModel model)
+        public void CreateCommissionRate(CommissionRateDetailViewModel model)
+        {
+            // Year validation
+            List<String> exitsting = new CommissionManager().GetCommissionRateYear().Select(x => x.Key).ToList();
+            if (exitsting.Contains(model.Year.ToString())) throw new ArgumentException(model.Year + " already exists");
+
+            // Prepare insertion
+            List<Mst_CommissionRate> collection = new List<Mst_CommissionRate>
+            {
+                // Sales
+                new Mst_CommissionRate
+                { PositionId = 1, Year = model.Year,
+                    Percentage = model.SalesPercentage, PercentageOf = model.SalesPercentageOf },
+
+                // Pm
+                new Mst_CommissionRate
+                { PositionId = 2, Year = model.Year,
+                    Percentage = model.PmPercentage, PercentageOf = model.PmPercentageOf },
+
+                // AppSupport
+                new Mst_CommissionRate
+                { PositionId = 3, Year = model.Year,
+                    Percentage = model.AppSupportPercentage, PercentageOf = model.AppSupportPercentageOf },
+
+                // InstallDelivery
+                new Mst_CommissionRate
+                { PositionId = 4, Year = model.Year,
+                    Percentage = model.InstallDeliveryPercentage, PercentageOf = model.InstallDeliveryPercentageOf },
+
+                // Admin
+                new Mst_CommissionRate
+                { PositionId = 5, Year = model.Year,
+                    Percentage = model.AdminPercentage, PercentageOf = model.AdminPercentageOf },
+
+                // Os
+                new Mst_CommissionRate
+                { PositionId = 6, Year = model.Year,
+                    Percentage = model.OsPercentage, PercentageOf = model.OsPercentageOf }
+            };
+
+            // Execute
+            IRepository<Mst_CommissionRate> repoCommissionRate = _unitOfWork.GetRepository<Mst_CommissionRate>();
+            repoCommissionRate.Insert(collection);
+            _unitOfWork.Execute();
+        }
+
+        public void UpdateCommissionRate(CommissionRateDetailViewModel model)
         {
             // Update CommissionRate
             IRepository<Mst_CommissionRate> repoCommissionRate = _unitOfWork.GetRepository<Mst_CommissionRate>();
-            IEnumerable<Mst_CommissionRate> rateList = repoCommissionRate.GetQueryable();
+            IEnumerable<Mst_CommissionRate> rateList = repoCommissionRate.GetQueryable(o => o.Year == model.Year);
             foreach (Mst_CommissionRate rate in rateList)
             {
                 repoCommissionRate.Update(MappingModelToRate(rate, model));
@@ -244,14 +292,14 @@ namespace AbleSuccess.Commissions.WebUi.Manager
             {
                 Key = o.Year.ToString(),
                 Value = o.Year.ToString()
-            }).Distinct().OrderBy(o => o.Key).ToList();
+            }).Distinct().OrderBy(o => o.Key).OrderByDescending(x=>x.Key).ToList();
         }
 
         #endregion
 
         #region [PRIVATE METHOD]
 
-        private Mst_CommissionRate MappingModelToRate(Mst_CommissionRate rate, CommissionRateViewModel model)
+        private Mst_CommissionRate MappingModelToRate(Mst_CommissionRate rate, CommissionRateDetailViewModel model)
         {
             switch (rate.PositionId)
             {

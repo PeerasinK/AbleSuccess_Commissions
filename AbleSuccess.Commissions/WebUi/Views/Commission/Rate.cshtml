@@ -16,21 +16,49 @@
     <div class="col-md-offset-2 col-md-8 well">
         <table class="col-sm-12">
             <tr>
-                <td class="col-sm-4 text-center">
+                @*<td class="col-sm-2 text-center">
                     <h3>&nbsp;</h3>
+                </td>*@
+                <td class="col-sm-4 text-right">
+                    <h3>Year: </h3>
                 </td>
                 <td class="col-sm-3 text-center">
-                    @Html.DropDownList("SearchYear", new SelectList(@Model.LookupCommissionRateYear, "Key", "Value"), new { @class = "form-control" })
+                    @Html.DropDownList("SearchYear", new SelectList(@Model.LookupCommissionRateYear, "Key", "Value"), new { @class = "form-control", onchange = "SearchRateDetail()" })
                 </td>
-                <td class="col-sm-4 text-center">
+                <td class="col-sm-2 text-center">
+                    <input type="button" value="New" class="btn btn-success" style="width:90%" onclick="NewRate()" />
                 </td>
-                <td class="col-sm-1 text-center">
+                <td class="col-sm-3 text-center">
                     &nbsp;
                 </td>
             </tr>
-            </table>
+        </table>
         <div id="CommissionRateDetail" class="container bootstrap snippet">
-            @*@Html.Partial("RateDetail")*@
         </div>
     </div>
 </div>
+<script>
+
+    SearchRateDetail();
+
+    function SearchRateDetail() {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            async: true,
+            cache: false,
+            url: '@Url.Action("RateDetail", "Commission")',
+            data: { year: $('#SearchYear').val() },
+            success: function (result) {
+                $('#CommissionRateDetail').html(result)
+            },
+            error: function (ex) {
+                bootbox.alert('Error occurred during processing');
+            }
+        });
+    }
+
+    function NewRate() {
+        location.href = '@Url.Action("RateNew", "Commission")' + '?id=-1';
+    }
+</script>
