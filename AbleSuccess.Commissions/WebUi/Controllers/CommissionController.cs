@@ -82,6 +82,17 @@ namespace AbleSuccess.Commissions.WebUi.Controllers
         }
 
         [HttpPost]
+        public JsonResult GetRateDetail(int year)
+        {
+            if (year == 0) year = DateTime.Now.Year;
+
+            CommissionManager manager = new CommissionManager();
+            CommissionRateDetailViewModel model = manager.GetCommissionRateDetail(year);
+
+            return Json(new { Result = model });
+        }
+
+        [HttpPost]
         public ActionResult NewRate(CommissionRateDetailViewModel model)
         {
             try

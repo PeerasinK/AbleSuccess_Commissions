@@ -437,6 +437,26 @@
         var date = new Date($("#PoDate").val()).toDateString();
         var split = date.split(' ');
         $("#PoDate").val(split[2] + ' ' + split[1] + ' ' + split[3]);
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            async: true,
+            cache: false,
+            url: '@Url.Action("GetRateDetail", "Commission")',
+            data: {year : split[3]},
+            success: function (response) {
+                $('#CommissionRate_SalesPercentage').val(parseFloat(response.Result["SalesPercentage"]));
+                $('#CommissionRate_PmPercentage').val(parseFloat(response.Result["PmPercentage"]));
+                $('#CommissionRate_AppSupportPercentage').val(parseFloat(response.Result["AppSupportPercentage"]));
+                $('#CommissionRate_InstallDeliveryPercentage').val(parseFloat(response.Result["InstallDeliveryPercentage"]));
+                $('#CommissionRate_AdminPercentage').val(parseFloat(response.Result["AdminPercentage"]));
+                $('#CommissionRate_OsPercentage').val(parseFloat(response.Result["OsPercentage"]));
+            },
+            error: function (ex) {
+                bootbox.alert('Error occurred during load commission rate processing');
+            }
+        })
     }
 
     function isEmpty(str) {
@@ -885,12 +905,12 @@
     function calculateTotalRate() {
 
         // Set 2 decimal places
-        $('#CommissionRate_SalesPercentage').val(parseFloat($('#CommissionRate_SalesPercentage').val()).toFixed(2));
-        $('#CommissionRate_PmPercentage').val(parseFloat($('#CommissionRate_PmPercentage').val()).toFixed(2));
-        $('#CommissionRate_AppSupportPercentage').val(parseFloat($('#CommissionRate_AppSupportPercentage').val()).toFixed(2));
-        $('#CommissionRate_InstallDeliveryPercentage').val(parseFloat($('#CommissionRate_InstallDeliveryPercentage').val()).toFixed(2));
-        $('#CommissionRate_AdminPercentage').val(parseFloat($('#CommissionRate_AdminPercentage').val()).toFixed(2));
-        $('#CommissionRate_OsPercentage').val(parseFloat($('#CommissionRate_OsPercentage').val()).toFixed(2));
+        $('#CommissionRate_SalesPercentage').val(parseFloat($('#CommissionRate_SalesPercentage').val()));
+        $('#CommissionRate_PmPercentage').val(parseFloat($('#CommissionRate_PmPercentage').val()));
+        $('#CommissionRate_AppSupportPercentage').val(parseFloat($('#CommissionRate_AppSupportPercentage').val()));
+        $('#CommissionRate_InstallDeliveryPercentage').val(parseFloat($('#CommissionRate_InstallDeliveryPercentage').val()));
+        $('#CommissionRate_AdminPercentage').val(parseFloat($('#CommissionRate_AdminPercentage').val()));
+        $('#CommissionRate_OsPercentage').val(parseFloat($('#CommissionRate_OsPercentage').val()));
 
         // Decalre variable
         var rateSales = parseFloat($('#CommissionRate_SalesPercentage').val());
@@ -911,7 +931,7 @@
 
         // Calculate total
         var total = rateSales + ratePm + rateAppSuport + rateInstallDelivery + rateAdmin;
-        $('#CommissionRate_TotalPercentage').val(total.toFixed(2));
+        $('#CommissionRate_TotalPercentage').val(total);
     }
 
     function checkShowHideDropdownProfile() {
