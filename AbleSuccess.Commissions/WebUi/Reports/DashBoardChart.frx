@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="09/04/2016 20:32:56" ReportInfo.Modified="04/15/2017 02:39:16" ReportInfo.CreatorVersion="2016.3.20.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/04/2016 20:32:56" ReportInfo.Modified="04/23/2017 21:14:34" ReportInfo.CreatorVersion="2016.3.20.0">
   <ScriptText>using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +18,13 @@ namespace FastReport
 {
   public class ReportScript
   {
-    
+    private void MSChart1_BeforePrint(object sender, EventArgs e)
+    {
+      if((String)Report.GetColumnValue(&quot;ReportCommission.ReportType&quot;)==&quot;&quot;)
+      {
+        //MSChart1.Chart.Series[0].EmptyPointStyle.Color =&quot;red&quot;;
+      }
+    }
   } 
 }
 	</ScriptText>
@@ -45,7 +51,7 @@ namespace FastReport
       <RichObject Name="Rich2" Top="94.5" Width="718.2" Height="94.5" Text="{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang2057{\fonttbl{\f0\fnil\fcharset0 Arial;}}&#13;&#10;{\*\generator Riched20 10.0.14393}\viewkind4\uc1 &#13;&#10;\pard\dn6\fs20\lang1033\tab\tab       Sales : \lang2057 [ReportCommission.Name]\tab\par&#13;&#10;\lang1033\tab\tab       \lang2057 Report Type\lang1033  : \lang2057 [ReportCommission.ReportType]\par&#13;&#10;\lang1033\tab\tab       \lang2057 Report Sub Type\lang1033  : \lang2057 [ReportCommission.ReportSubType]\par&#13;&#10;\lang1033\tab\tab       Year : \lang2057 [ReportCommission.Year]\par&#13;&#10;}&#13;&#10;"/>
     </PageHeaderBand>
     <ReportSummaryBand Name="ReportSummary1" Top="193" Width="718.2" Height="567">
-      <MSChartObject Name="MSChart1" Top="75.6" Width="718.2" Height="453.6" DataSource="BusinessObjectDataSource6" Filter="" AutoSeriesColumn="" ChartData="PENoYXJ0IFNpemU9IjI4OCwgMjMyIiBCb3JkZXJsaW5lQ29sb3I9IkRhcmtHcmF5IiBCb3JkZXJsaW5lV2lkdGg9IjIiIEJvcmRlcmxpbmVEYXNoU3R5bGU9IlNvbGlkIj4NCiAgPFNlcmllcz4NCiAgICA8U2VyaWVzIE5hbWU9IlNlcmllczEiIExlZ2VuZD0iRGVmYXVsdCIgWFZhbHVlVHlwZT0iU3RyaW5nIiBZVmFsdWVUeXBlPSJEb3VibGUiIENoYXJ0QXJlYT0iRGVmYXVsdCI+DQogICAgICA8UG9pbnRzPg0KICAgICAgICA8RGF0YVBvaW50IFlWYWx1ZXM9IjEiIEF4aXNMYWJlbD0iQSIgLz4NCiAgICAgICAgPERhdGFQb2ludCBZVmFsdWVzPSIzIiBBeGlzTGFiZWw9IkIiIC8+DQogICAgICAgIDxEYXRhUG9pbnQgWVZhbHVlcz0iMiIgQXhpc0xhYmVsPSJDIiAvPg0KICAgICAgICA8RGF0YVBvaW50IFlWYWx1ZXM9IjQiIEF4aXNMYWJlbD0iRCIgLz4NCiAgICAgIDwvUG9pbnRzPg0KICAgIDwvU2VyaWVzPg0KICA8L1Nlcmllcz4NCiAgPExlZ2VuZHM+DQogICAgPExlZ2VuZCBOYW1lPSJEZWZhdWx0IiBFbmFibGVkPSJGYWxzZSIgQWxpZ25tZW50PSJGYXIiIERvY2tpbmc9IlRvcCI+DQogICAgPC9MZWdlbmQ+DQogIDwvTGVnZW5kcz4NCiAgPFRpdGxlcz4NCiAgICA8VGl0bGUgTmFtZT0iVGl0bGUxIiBWaXNpYmxlPSJGYWxzZSIgSXNEb2NrZWRJbnNpZGVDaGFydEFyZWE9IkZhbHNlIiBUZXh0PSJiYmIiPg0KICAgIDwvVGl0bGU+DQogIDwvVGl0bGVzPg0KICA8Q2hhcnRBcmVhcz4NCiAgICA8Q2hhcnRBcmVhIE5hbWU9IkRlZmF1bHQiPg0KICAgICAgPEF4aXNZPg0KICAgICAgICA8TWFqb3JHcmlkIExpbmVDb2xvcj0iNjQsIDY0LCA2NCwgNjQiIC8+DQogICAgICA8L0F4aXNZPg0KICAgICAgPEF4aXNYIElzTGFiZWxBdXRvRml0PSJGYWxzZSIgSW50ZXJ2YWw9IjEiPg0KICAgICAgICA8TWFqb3JHcmlkIExpbmVDb2xvcj0iNjQsIDY0LCA2NCwgNjQiIC8+DQogICAgICA8L0F4aXNYPg0KICAgICAgPEF4aXNYMiBJc0xhYmVsQXV0b0ZpdD0iRmFsc2UiPg0KICAgICAgICA8TWFqb3JHcmlkIExpbmVDb2xvcj0iNjQsIDY0LCA2NCwgNjQiIC8+DQogICAgICA8L0F4aXNYMj4NCiAgICAgIDxBeGlzWTI+DQogICAgICAgIDxNYWpvckdyaWQgTGluZUNvbG9yPSI2NCwgNjQsIDY0LCA2NCIgLz4NCiAgICAgIDwvQXhpc1kyPg0KICAgIDwvQ2hhcnRBcmVhPg0KICA8L0NoYXJ0QXJlYXM+DQogIDxCb3JkZXJTa2luIFNraW5TdHlsZT0iRW1ib3NzIiAvPg0KPC9DaGFydD4=">
+      <MSChartObject Name="MSChart1" Top="75.6" Width="718.2" Height="453.6" BeforePrintEvent="MSChart1_BeforePrint" DataSource="BusinessObjectDataSource6" Filter="" AutoSeriesColumn="" ChartData="PENoYXJ0IFNpemU9IjI4OCwgMjMyIiBCb3JkZXJsaW5lQ29sb3I9IkRhcmtHcmF5IiBCb3JkZXJsaW5lV2lkdGg9IjIiIEJvcmRlcmxpbmVEYXNoU3R5bGU9IlNvbGlkIj4NCiAgPFNlcmllcz4NCiAgICA8U2VyaWVzIE5hbWU9IlNlcmllczEiIExlZ2VuZD0iRGVmYXVsdCIgWFZhbHVlVHlwZT0iU3RyaW5nIiBZVmFsdWVUeXBlPSJEb3VibGUiIENoYXJ0VHlwZT0iU3RhY2tlZENvbHVtbiIgQ2hhcnRBcmVhPSJEZWZhdWx0Ij4NCiAgICAgIDxQb2ludHM+DQogICAgICAgIDxEYXRhUG9pbnQgWVZhbHVlcz0iMSIgQXhpc0xhYmVsPSJBIiAvPg0KICAgICAgICA8RGF0YVBvaW50IFlWYWx1ZXM9IjMiIEF4aXNMYWJlbD0iQiIgLz4NCiAgICAgICAgPERhdGFQb2ludCBZVmFsdWVzPSIyIiBBeGlzTGFiZWw9IkMiIC8+DQogICAgICAgIDxEYXRhUG9pbnQgWVZhbHVlcz0iNCIgQXhpc0xhYmVsPSJEIiAvPg0KICAgICAgPC9Qb2ludHM+DQogICAgPC9TZXJpZXM+DQogIDwvU2VyaWVzPg0KICA8TGVnZW5kcz4NCiAgICA8TGVnZW5kIE5hbWU9IkRlZmF1bHQiIEVuYWJsZWQ9IkZhbHNlIiBJc0RvY2tlZEluc2lkZUNoYXJ0QXJlYT0iRmFsc2UiIERvY2tpbmc9IlRvcCI+DQogICAgPC9MZWdlbmQ+DQogIDwvTGVnZW5kcz4NCiAgPFRpdGxlcz4NCiAgICA8VGl0bGUgTmFtZT0iVGl0bGUxIiBJc0RvY2tlZEluc2lkZUNoYXJ0QXJlYT0iRmFsc2UiIFRleHQ9IiAgICAgKOC4q+C4meC5iOC4p+C4ojrguJrguLLguJcpIiBGb250PSJNaWNyb3NvZnQgU2FucyBTZXJpZiwgMTJwdCwgR2RpQ2hhclNldD0wIiBBbGlnbm1lbnQ9IlRvcExlZnQiPg0KICAgIDwvVGl0bGU+DQogIDwvVGl0bGVzPg0KICA8Q2hhcnRBcmVhcz4NCiAgICA8Q2hhcnRBcmVhIE5hbWU9IkRlZmF1bHQiPg0KICAgICAgPEF4aXNZPg0KICAgICAgICA8TWFqb3JHcmlkIExpbmVDb2xvcj0iNjQsIDY0LCA2NCwgNjQiIC8+DQogICAgICA8L0F4aXNZPg0KICAgICAgPEF4aXNYIElzTGFiZWxBdXRvRml0PSJGYWxzZSIgSW50ZXJ2YWw9IjEiPg0KICAgICAgICA8TWFqb3JHcmlkIExpbmVDb2xvcj0iNjQsIDY0LCA2NCwgNjQiIC8+DQogICAgICA8L0F4aXNYPg0KICAgICAgPEF4aXNYMiBJc0xhYmVsQXV0b0ZpdD0iRmFsc2UiPg0KICAgICAgICA8TWFqb3JHcmlkIExpbmVDb2xvcj0iNjQsIDY0LCA2NCwgNjQiIC8+DQogICAgICA8L0F4aXNYMj4NCiAgICAgIDxBeGlzWTI+DQogICAgICAgIDxNYWpvckdyaWQgTGluZUNvbG9yPSI2NCwgNjQsIDY0LCA2NCIgLz4NCiAgICAgIDwvQXhpc1kyPg0KICAgIDwvQ2hhcnRBcmVhPg0KICA8L0NoYXJ0QXJlYXM+DQogIDxCb3JkZXJTa2luIFNraW5TdHlsZT0iRW1ib3NzIiAvPg0KPC9DaGFydD4=">
         <MSChartSeries Name="Series1" XValue="[ReportCommission.ChartDataModels.label]" YValue1="[ReportCommission.ChartDataModels.y]"/>
       </MSChartObject>
       <RichObject Name="Rich1" Top="47.25" Width="718.2" Height="28.35" Text="{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil Arial;}{\f1\fnil Tahoma;}}&#13;&#10;{\*\generator Riched20 10.0.14393}\viewkind4\uc1 &#13;&#10;\pard\qc\b\f0\fs28 [ReportCommission.TitleReport]\b0\f1\fs17\par&#13;&#10;}&#13;&#10;"/>
